@@ -169,13 +169,16 @@ df["color"] = df["Health_Score"].apply(get_color)
 
 # --- SIDEBAR NAVIGATION ---
 with st.sidebar:
-    st.markdown("""
-        <div style="text-align: center; padding: 10px 0;">
-            <div style="font-size: 2rem; color: #D4AF37;">⚜️</div>
-            <h3 style="font-size: 1.05rem; letter-spacing: 2px; color: #F3E5AB; margin-top: 4px;">ROADGUARD</h3>
-            <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">AI 2.0 EXECUTIVE</p>
-        </div>
-    """, unsafe_allow_html=True)
+    # Render Custom Logo Image[cite: 1]
+    if os.path.exists("logo.png"):
+        st.image("logo.png", use_container_width=True)
+    else:
+        st.markdown("""
+            <div style="text-align: center; padding: 10px 0;">
+                <h3 style="font-size: 1.05rem; letter-spacing: 2px; color: #F3E5AB; margin-top: 4px;">ROADGUARD</h3>
+                <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">AI 2.0 EXECUTIVE</p>
+            </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("<hr style='border-color: #1A1A1A;'>", unsafe_allow_html=True)
     
@@ -366,7 +369,6 @@ elif st.session_state.current_page == "👁️ Neural Vision Lab":
                     time.sleep(1)
                 st.success("Inference Complete.")
                 
-                # NEW FEATURE: V2I Audio/Visual Warning Broadcast Simulation
                 st.error("🚨 **V2I AUDIO/VISUAL ALERT TRIGGERED:** Critical road defect detected 50m ahead. Speed advisory broadcasted to connected vehicles in proximity.")
                 
                 st.markdown("""
@@ -437,7 +439,6 @@ elif st.session_state.current_page == "💰 Severity & Cost Estimator":
     with c2:
         depth_cm = st.slider("Pothole Depth (cm)", 2, 70, 15)
 
-    # Calculation logic for asphalt volume and cost
     volume_liters = (width_cm * width_cm * depth_cm) / 1000
     material_cost = volume_liters * 2.75
     labor_fixed = 150.00
@@ -455,7 +456,7 @@ elif st.session_state.current_page == "💰 Severity & Cost Estimator":
         st.success("✅ Standard quick-patch cold mix sufficient.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= PAGE 5: CAPABILITIES MATRIX (NEW PAGE) =================
+# ================= PAGE 5: CAPABILITIES MATRIX =================
 elif st.session_state.current_page == "🚀 Capabilities Matrix":
     st.markdown("""
         <div class="animated-page">
