@@ -132,19 +132,19 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Researched Infrastructure Telemetry Data
+# Hyper-Local Trivandrum Pilot Telemetry Data
 if "road_data" not in st.session_state:
     st.session_state.road_data = pd.DataFrame({
-        "Road_ID": ["RG-101", "RG-102", "RG-103", "RG-104", "RG-105", "RG-106"],
-        "Location": ["MG Road, Kochi", "NH-66 Edappally Bypass", "MC Road, Trivandrum", "Seaport-Airport Rd", "Vyttila Mobility Hub Rd", "Marine Drive Promenade"],
-        "Latitude": [9.9816, 10.0261, 8.5241, 10.0159, 9.9667, 9.9784],
-        "Longitude": [76.2999, 76.3125, 76.9366, 76.3419, 76.3188, 76.2758],
-        "Health_Score": [92, 65, 41, 18, 54, 88],
-        "Status": ["Optimal", "Moderate", "High Risk", "Critical Failure", "Moderate Risk", "Optimal"],
-        "Predicted_Failure_Days": ["120+ days", "45 days", "14 days", "3 days (Immediate)", "30 days", "90+ days"],
-        "Two_Wheeler_Risk": ["Low Risk", "Moderate Risk", "High Risk", "Critical High Risk", "Moderate Risk", "Low Risk"],
-        "Four_Wheeler_Risk": ["Low Risk", "Low Risk", "Moderate Risk", "High Risk", "Low Risk", "Low Risk"],
-        "Heavy_Vehicle_Risk": ["Low Risk", "High Risk", "Critical High Risk", "Structural Threat", "High Risk", "Low Risk"]
+        "Road_ID": ["TVM-01", "TVM-02", "TVM-03", "TVM-04", "TVM-05"],
+        "Location": ["MC Road, Ulloor Junction", "NH-66 Kazhakkoottam Bypass", "Kowdiar Square Corridor", "Pattom-Kumarapuram Rd", "East Fort City Ring Rd"],
+        "Latitude": [8.5331, 8.5645, 8.5175, 8.5208, 8.4842],
+        "Longitude": [76.9317, 76.8782, 76.9551, 76.9382, 76.9472],
+        "Health_Score": [88, 42, 94, 28, 65],
+        "Status": ["Optimal", "Moderate Risk", "Optimal", "Critical Failure", "Moderate Risk"],
+        "Predicted_Failure_Days": ["90+ days", "30 days", "120+ days", "4 days (Immediate)", "45 days"],
+        "Two_Wheeler_Risk": ["Low Risk", "High Risk", "Low Risk", "Critical High Risk", "Moderate Risk"],
+        "Four_Wheeler_Risk": ["Low Risk", "Moderate Risk", "Low Risk", "High Risk", "Low Risk"],
+        "Heavy_Vehicle_Risk": ["Low Risk", "High Risk", "Low Risk", "Structural Threat", "High Risk"]
     })
 
 df = st.session_state.road_data
@@ -152,24 +152,23 @@ df = st.session_state.road_data
 # Community Verification Store in Session State
 if "community_reports" not in st.session_state:
     st.session_state.community_reports = [
-        {"id": 1, "location": "Kaloor Junction", "type": "Pothole", "votes": 14, "status": "Active"},
-        {"id": 2, "location": "Edappally Toll", "type": "Surface Fracture", "votes": 9, "status": "Active"}
+        {"id": 1, "location": "Ulloor Junction Patch", "type": "Pothole / Edge Break", "votes": 14, "status": "Active"},
+        {"id": 2, "location": "Kazhakkoottam Service Rd", "type": "Surface Fracture", "votes": 9, "status": "Active"}
     ]
 
 # Function to assign RGB colors for Pydeck
 def get_color(score):
     if score >= 75:
-        return [16, 185, 129, 210]   # Emerald Green
+        return [10, 185, 129, 210]   # Emerald Green
     elif score >= 40:
         return [245, 158, 11, 210]  # Amber Orange
     else:
-        return [239, 68, 68, 210]    # Red Danger
+        return [239, 68, 68, 210]   # Red Danger
 
 df["color"] = df["Health_Score"].apply(get_color)
 
 # --- SIDEBAR NAVIGATION ---
 with st.sidebar:
-    # Render Custom Logo Image[cite: 1]
     if os.path.exists("logo.png"):
         st.image("logo.png", use_container_width=True)
     else:
@@ -206,8 +205,8 @@ with st.sidebar:
     st.markdown("<hr style='border-color: #1A1A1A;'>", unsafe_allow_html=True)
     st.markdown("""
         <div style="padding: 10px; border-radius: 6px; border: 1px solid #1C1C1C; background: rgba(255,255,255,0.01);">
-            <div style="font-size: 0.7rem; color: #888;">AI MONITOR GRID</div>
-            <div style="font-size: 0.82rem; font-weight: 600; color: #D4AF37; margin-top: 2px;">SECURE TELEMETRY</div>
+            <div style="font-size: 0.7rem; color: #888;">PILOT DEPLOYMENT ZONE</div>
+            <div style="font-size: 0.82rem; font-weight: 600; color: #D4AF37; margin-top: 2px;">TRIVANDRUM WARD 1</div>
             <div style="font-size: 0.68rem; color: #666; margin-top: 4px;">Kerala Public Works Dept.</div>
         </div>
     """, unsafe_allow_html=True)
@@ -226,19 +225,19 @@ if st.session_state.current_page == "🏠 Executive Overview":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2.2rem; margin-bottom: 2px;'>ROADGUARD AI 2.0</h1>
-            <p style='color: #888; font-size: 0.95rem; margin-bottom: 25px;'>Autonomous Infrastructure Health & Multi-Vehicle Safety Intelligence Platform.</p>
+            <p style='color: #888; font-size: 0.95rem; margin-bottom: 25px;'>Trivandrum Municipal Pilot: Autonomous Infrastructure Health & Multi-Vehicle Safety Intelligence.</p>
         </div>
     """, unsafe_allow_html=True)
 
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown('<div class="stat-box"><div class="stat-number">1,420 km</div><div class="stat-title">Network Scan Area</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="stat-box"><div class="stat-number">12.4 km</div><div class="stat-title">Pilot Scan Corridor</div></div>', unsafe_allow_html=True)
     with m2:
         st.markdown('<div class="stat-box"><div class="stat-number" style="color:#EF4444;">1 Asset</div><div class="stat-title">Critical Intervention</div></div>', unsafe_allow_html=True)
     with m3:
         st.markdown('<div class="stat-box"><div class="stat-number" style="color:#10B981;">99.4%</div><div class="stat-title">YOLOv8 Scan Accuracy</div></div>', unsafe_allow_html=True)
     with m4:
-        st.markdown('<div class="stat-box"><div class="stat-number">₹2.7 Cr</div><div class="stat-title">Est. Preventative Savings</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="stat-box"><div class="stat-number">₹42.5 L</div><div class="stat-title">Ward Preventative Savings</div></div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### System Command Modules")
@@ -248,7 +247,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🏛️ Municipal Command Center</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Real-time Mapbox spatial heatmap and multi-vehicle road safety profiling.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Live Mapbox Trivandrum GIS heatmap and multi-vehicle road safety profiling.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN COMMAND CENTER", key="btn_cmd"):
@@ -291,22 +290,22 @@ elif st.session_state.current_page == "🏛️ Municipal Command":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>MUNICIPAL COMMAND CENTER</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 20px;'>Mapbox Spatial Intelligence and Multi-Vehicle Risk Diagnostics.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 20px;'>Trivandrum Spatial Intelligence and Multi-Vehicle Risk Diagnostics.</p>
         </div>
     """, unsafe_allow_html=True)
     
     col_map, col_details = st.columns([1.6, 1])
     with col_map:
-        st.markdown("### Infrastructure Spatial Grid")
+        st.markdown("### Trivandrum Infrastructure Spatial Grid")
         layer = pdk.Layer(
             "ScatterplotLayer",
             data=df,
             get_position=["Longitude", "Latitude"],
             get_fill_color="color",
-            get_radius=1100,
+            get_radius=350,
             pickable=True,
         )
-        view_state = pdk.ViewState(latitude=9.9816, longitude=76.2999, zoom=9.8, pitch=30)
+        view_state = pdk.ViewState(latitude=8.5241, longitude=76.9366, zoom=12.5, pitch=30)
         deck = pdk.Deck(
             layers=[layer],
             initial_view_state=view_state,
@@ -398,7 +397,7 @@ elif st.session_state.current_page == "📢 Citizen Vigil Hub":
         st.markdown('<div class="clean-card">', unsafe_allow_html=True)
         st.markdown("### Submit Road Hazard Report")
         with st.form("citizen_report"):
-            loc_name = st.text_input("Street / Junction Name")
+            loc_name = st.text_input("Street / Junction Name (e.g., Peroorkada Junction)")
             hazard_type = st.selectbox("Observed Anomaly", ["Minor Crack 🟡", "Pothole / Edge Break 🟠", "Severe Road Failure 🔴"])
             submitted = st.form_submit_button("SUBMIT TELEMETRY")
             
@@ -552,4 +551,4 @@ elif st.session_state.current_page == "🏆 UN SDG Impact":
 
 # Minimal Footer
 st.markdown("---")
-st.markdown("<p style='text-align: center; color: #444; font-size: 0.72rem; letter-spacing: 1px;'>ROADGUARD AI 2.0 — KERALA MUNICIPAL INFRASTRUCTURE CONTROL</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #444; font-size: 0.72rem; letter-spacing: 1px;'>ROADGUARD AI 2.0 — TRIVANDRUM MUNICIPAL PILOT CONTROL</p>", unsafe_allow_html=True)
