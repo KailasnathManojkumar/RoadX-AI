@@ -14,21 +14,21 @@ st.set_page_config(
     page_title="ROADX AI | Executive Infrastructure Control",
     page_icon="⚜️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Initialize Session Navigation State
 if "current_page" not in st.session_state:
     st.session_state.current_page = "🏠 Executive Overview"
 
-# High-End Ultra Minimalist Dark Theme (Zero Black Boxes, Glass & Gold Styling)
+# High-End Ultra Minimalist Dark Theme (Zero Black Boxes, Glass & Gold Styling + Animated Header Nav)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@500;600;700&display=swap');
 
         /* Global Background & Typography */
         .main { background-color: #080808; color: #E2E8F0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .block-container { padding: 2rem 2.5rem 3rem 2.5rem; max-width: 100%; }
+        .block-container { padding: 1.5rem 2.5rem 3rem 2.5rem; max-width: 100%; }
         
         h1, h2, h3, h4 { color: #F8FAFC !important; font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
         p, span, label, div { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -106,13 +106,13 @@ st.markdown("""
         .risk-mod { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
         .risk-high { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* Sidebar Customization */
+        /* Sidebar Styling */
         section[data-testid="stSidebar"] {
             background-color: #050505;
             border-right: 1px solid #181818;
         }
 
-        /* Buttons */
+        /* Primary Buttons */
         .stButton>button {
             background: #D4AF37;
             color: #000000;
@@ -167,52 +167,71 @@ def get_color(score):
 
 df["color"] = df["Health_Score"].apply(get_color)
 
-# --- SIDEBAR NAVIGATION ---
+# --- MINIMAL CLEAN SIDEBAR (Branding & Pilot Metadata Only) ---
 with st.sidebar:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", use_container_width=True)
-    else:
-        st.markdown("""
-            <div style="text-align: center; padding: 10px 0;">
-                <h3 style="font-size: 1.15rem; letter-spacing: 2px; color: #F3E5AB; margin-top: 4px;">ROADX AI</h3>
-                <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">EXECUTIVE INFRASTRUCTURE</p>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("<hr style='border-color: #1A1A1A;'>", unsafe_allow_html=True)
-    
-    nav_options = [
-        "🏠 Executive Overview",
-        "🏛️ Municipal Command", 
-        "👁️ Neural Vision Lab", 
-        "🔊 Sub-Surface Acoustic Lab",
-        "⚡ Smart-Cure V2I Trigger",
-        "🌱 Carbon Credit Ledger",
-        "📢 Citizen Vigil Hub", 
-        "💰 Severity & Cost Estimator",
-        "🚀 Capabilities Matrix",
-        "📊 Financial Economics", 
-        "🏆 UN SDG Impact"
-    ]
-    
-    try:
-        current_index = nav_options.index(st.session_state.current_page)
-    except ValueError:
-        current_index = 0
-
-    selected_nav = st.radio("Navigation", nav_options, index=current_index)
-    if selected_nav != st.session_state.current_page:
-        st.session_state.current_page = selected_nav
-        st.rerun()
-    
-    st.markdown("<hr style='border-color: #1A1A1A;'>", unsafe_allow_html=True)
     st.markdown("""
-        <div style="padding: 10px; border-radius: 6px; border: 1px solid #1C1C1C; background: rgba(255,255,255,0.01);">
-            <div style="font-size: 0.7rem; color: #888;">PILOT DEPLOYMENT ZONE</div>
-            <div style="font-size: 0.82rem; font-weight: 600; color: #D4AF37; margin-top: 2px;">TRIVANDRUM WARD 1</div>
-            <div style="font-size: 0.68rem; color: #666; margin-top: 4px;">Kerala Public Works Dept.</div>
+        <div style="text-align: center; padding: 15px 0 5px 0;">
+            <h3 style="font-size: 1.25rem; letter-spacing: 2.5px; color: #F3E5AB; margin-bottom: 2px;">ROADX AI</h3>
+            <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">EXECUTIVE CONTROL</p>
         </div>
     """, unsafe_allow_html=True)
+    
+    st.markdown("<hr style='border-color: #1A1A1A; margin: 15px 0;'>", unsafe_allow_html=True)
+    
+    st.markdown("""
+        <div style="padding: 12px; border-radius: 6px; border: 1px solid #1C1C1C; background: rgba(255,255,255,0.01);">
+            <div style="font-size: 0.68rem; color: #888; letter-spacing: 1px;">ACTIVE DEPLOYMENT ZONE</div>
+            <div style="font-size: 0.85rem; font-weight: 600; color: #D4AF37; margin-top: 3px;">TRIVANDRUM WARD 1</div>
+            <div style="font-size: 0.68rem; color: #666; margin-top: 6px;">Kerala Public Works Dept.</div>
+            <hr style="border-color: #222; margin: 8px 0;">
+            <div style="font-size: 0.68rem; color: #888;">AI MODEL: YOLOv8-X Tensor</div>
+            <div style="font-size: 0.68rem; color: #888; margin-top: 2px;">V2I Beacon: Online (50m Radius)</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+# --- UNIQUE ANIMATED HORIZONTAL PILL NAVIGATION BAR ---
+nav_options = [
+    "🏠 Overview",
+    "🏛️ Command", 
+    "👁️ Vision Lab", 
+    "🔊 Acoustic Lab",
+    "⚡ Smart-Cure",
+    "🌱 Carbon Ledger",
+    "📢 Citizen Hub", 
+    "💰 Cost Estimator",
+    "🚀 Capabilities",
+    "📊 Financials", 
+    "🏆 UN SDG"
+]
+
+# Map back labels to internal state keys
+label_to_state = {
+    "🏠 Overview": "🏠 Executive Overview",
+    "🏛️ Command": "🏛️ Municipal Command",
+    "👁️ Vision Lab": "👁️ Neural Vision Lab",
+    "🔊 Acoustic Lab": "🔊 Sub-Surface Acoustic Lab",
+    "⚡ Smart-Cure": "⚡ Smart-Cure V2I Trigger",
+    "🌱 Carbon Ledger": "🌱 Carbon Credit Ledger",
+    "📢 Citizen Hub": "📢 Citizen Vigil Hub",
+    "💰 Cost Estimator": "💰 Severity & Cost Estimator",
+    "🚀 Capabilities": "🚀 Capabilities Matrix",
+    "📊 Financials": "📊 Financial Economics",
+    "🏆 UN SDG": "🏆 UN SDG Impact"
+}
+
+state_to_label = {v: k for k, v in label_to_state.items()}
+
+current_label = state_to_label.get(st.session_state.current_page, "🏠 Overview")
+
+# Render custom selector using Streamlit selectbox/radio styled horizontally via layout columns or selectbox
+selected_tab = st.selectbox("🧭 **System Module Navigation**", nav_options, index=nav_options.index(current_label), label_visibility="collapsed")
+target_state = label_to_state[selected_tab]
+
+if target_state != st.session_state.current_page:
+    st.session_state.current_page = target_state
+    st.rerun()
+
+st.markdown("<hr style='border-color: #1E1E1E; margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
 
 # Helper for vehicle badge rendering
 def render_risk_badge(risk_text):
