@@ -185,6 +185,9 @@ with st.sidebar:
         "🏠 Executive Overview",
         "🏛️ Municipal Command", 
         "👁️ Neural Vision Lab", 
+        "🔊 Sub-Surface Acoustic Lab",
+        "⚡ Smart-Cure V2I Trigger",
+        "🌱 Carbon Credit Ledger",
         "📢 Citizen Vigil Hub", 
         "💰 Severity & Cost Estimator",
         "🚀 Capabilities Matrix",
@@ -237,7 +240,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
     with m3:
         st.markdown('<div class="stat-box"><div class="stat-number" style="color:#10B981;">99.4%</div><div class="stat-title">YOLOv8 Scan Accuracy</div></div>', unsafe_allow_html=True)
     with m4:
-        st.markdown('<div class="stat-box"><div class="stat-number">₹42.5 L</div><div class="stat-title">Ward Preventative Savings</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="stat-box"><div class="stat-number">142 t</div><div class="stat-title">Carbon Credits Issued</div></div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### System Command Modules")
@@ -256,33 +259,33 @@ if st.session_state.current_page == "🏠 Executive Overview":
             
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">👁️ Neural Vision Lab</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Upload pavement images with live V2I audio/visual warning triggers.</p>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🔊 Sub-Surface Acoustic Lab</h3>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Ground-penetrating vibration profiling to predict sinkholes before surface cracks appear.</p>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("OPEN VISION LAB", key="btn_vis"):
-            st.session_state.current_page = "👁️ Neural Vision Lab"
+        if st.button("OPEN ACOUSTIC LAB", key="btn_acou"):
+            st.session_state.current_page = "🔊 Sub-Surface Acoustic Lab"
             st.rerun()
 
     with c2:
         st.markdown("""
             <div class="nav-card">
-                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">💰 Severity & Cost Estimator</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Calculate physical asphalt volume, repair budgets, and material requirements.</p>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">⚡ Smart-Cure V2I Trigger</h3>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Automated vehicle-to-infrastructure trigger for self-healing polymer asphalt activation.</p>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("OPEN COST CALCULATOR", key="btn_cost"):
-            st.session_state.current_page = "💰 Severity & Cost Estimator"
+        if st.button("OPEN SMART-CURE TRIGGER", key="btn_cure"):
+            st.session_state.current_page = "⚡ Smart-Cure V2I Trigger"
             st.rerun()
 
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🚀 Complete Features & Capabilities</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Explore the full directory of advanced features and modules provided.</p>
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🌱 Carbon Credit Ledger</h3>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Cryptographic ESG audit reports and municipal carbon credit issuance.</p>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("VIEW CAPABILITIES DIRECTORY", key="btn_caps"):
-            st.session_state.current_page = "🚀 Capabilities Matrix"
+        if st.button("OPEN CARBON LEDGER", key="btn_carb"):
+            st.session_state.current_page = "🌱 Carbon Credit Ledger"
             st.rerun()
 
 # ================= PAGE 1: MUNICIPAL COMMAND =================
@@ -341,7 +344,7 @@ elif st.session_state.current_page == "🏛️ Municipal Command":
         """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= PAGE 2: VISION LAB (WITH V2I ALERTS) =================
+# ================= PAGE 2: VISION LAB =================
 elif st.session_state.current_page == "👁️ Neural Vision Lab":
     st.markdown("""
         <div class="animated-page">
@@ -383,7 +386,117 @@ elif st.session_state.current_page == "👁️ Neural Vision Lab":
             st.info("Upload an image on the left panel to begin diagnostic scan and test V2I warnings.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= PAGE 3: CITIZEN HUB (WITH COMMUNITY VERIFICATION) =================
+# ================= NEW FEATURE 1: SUB-SURFACE ACOUSTIC LAB =================
+elif st.session_state.current_page == "🔊 Sub-Surface Acoustic Lab":
+    st.markdown("""
+        <div class="animated-page">
+            <h1 style='font-size: 2rem; margin-bottom: 2px;'>SUB-SURFACE ACOUSTIC SONAR LAB</h1>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Listening Inside the Earth: Predicting Invisible Cavities & Sinkholes Before Surface Cracking Occurs.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_ac1, col_ac2 = st.columns([1.2, 1])
+    with col_ac1:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### Acoustic Resonance Profiler")
+        sel_corridor = st.selectbox("Select Test Corridor:", ["MC Road Sector B (Ulloor)", "NH-66 Kazhakkoottam Underpass", "Kowdiar Junction Ring"])
+        sweep_speed = st.slider("Vehicle Fleet Roll Speed (km/h)", 20, 80, 45)
+        
+        if st.button("EXECUTE SUB-SURFACE ACOUSTIC SCAN"):
+            with st.spinner("Analyzing tire vibration frequencies and acoustic dampening profiles..."):
+                time.sleep(1.2)
+            st.success("Acoustic Tomography Mapping Successful.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col_ac2:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### Sub-Surface Anomaly Report")
+        st.markdown("""
+            <div style="font-size: 0.88rem; line-height: 1.8;">
+                <b>Corridor ID:</b> TVM-ACOUSTIC-02<br>
+                <b>Sub-Base Void Status:</b> <span style="color: #EF4444; font-weight: 750;">CAVITY DETECTED (-1.2m depth)</span><br>
+                <b>Estimated Time to Sinkhole Formation:</b> 28 Days<br>
+                <b>Surface Visual Status:</b> 100% Intact (Invisible to Cameras)<br>
+                <b>Acoustic Frequency Deviation:</b> 42.8 Hz (Standard: 18.2 Hz)
+            </div>
+            <hr style="border-color: #222; margin: 12px 0;">
+            <div style="font-size: 0.83rem; color: #D4AF37;"><b>AI Prognostic Recommendation:</b> Inject low-viscosity polyurethane grout into sub-base layer immediately to arrest soil erosion.</div>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ================= NEW FEATURE 2: SMART-CURE V2I TRIGGER =================
+elif st.session_state.current_page == "⚡ Smart-Cure V2I Trigger":
+    st.markdown("""
+        <div class="animated-page">
+            <h1 style='font-size: 2rem; margin-bottom: 2px;'>SMART-CURE V2I MATERIAL TRIGGER</h1>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Autonomous V2I Communication: Triggering Self-Healing Polymer Asphalt Via Roadside Units.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    c_tr1, c_tr2 = st.columns(2)
+    with c_tr1:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### High-Stress Load Zone Config")
+        truck_weight = st.slider("Approaching Heavy Axle Load (Tons)", 10, 45, 32)
+        polymer_status = st.selectbox("Embedded Microcapsule Status", ["Active (Ready to Bond)", "Depleted", "Regenerating"])
+        
+        if st.button("SEND V2I INDUCTION PULSE"):
+            with st.spinner("Broadcasting low-frequency induction pulse via roadside unit..."):
+                time.sleep(1)
+            st.success("Induction Pulse Broadcasted Successfully.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with c_tr2:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### Material Activation Telemetry")
+        st.markdown(f"""
+            <div style="font-size: 0.88rem; line-height: 1.8;">
+                <b>Axle Stress Level:</b> {truck_weight} Tons<br>
+                <b>Induction Frequency:</b> 300 kHz Electromagnetic Pulse<br>
+                <b>Polymer Viscosity State:</b> <span style="color: #10B981;">Curing & Bonding Active</span><br>
+                <b>Asphalt Fatigue Recovery Rate:</b> 91.4%<br>
+                <b>Crew Intervention Required:</b> NONE (Autonomous Healing)
+            </div>
+            <hr style="border-color: #222; margin: 12px 0;">
+            <div style="font-size: 0.83rem; color: #D4AF37;"><b>System Note:</b> Microcapsules of rejuvenating oil successfully melted and sealed micro-fractures under heavy truck weight.</div>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ================= NEW FEATURE 3: CARBON CREDIT LEDGER =================
+elif st.session_state.current_page == "🌱 Carbon Credit Ledger":
+    st.markdown("""
+        <div class="animated-page">
+            <h1 style='font-size: 2rem; margin-bottom: 2px;'>MUNICIPAL CARBON CREDIT LEDGER</h1>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Automated ESG Monetization: Cryptographic Auditing of Avoided Road Reconstruction Emissions.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    cb1, cb2 = st.columns(2)
+    with cb1:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### Preventative Carbon Offset Metrics")
+        st.markdown("""
+            <div style="font-size: 0.88rem; line-height: 1.8;">
+                <b>Total Avoided Hot-Mix Bitumen:</b> 340 Metric Tons<br>
+                <b>Transport Fuel Saved:</b> 14,200 Liters Diesel<br>
+                <b>Net Carbon Dioxide Offset:</b> <span style="color:#10B981; font-weight:700;">142.5 tCO2e</span><br>
+                <b>Current Market Valuation:</b> ₹11,80,000 (~$14,200 USD)<br>
+                <b>Audit Status:</b> Verified & Cryptographically Signed
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with cb2:
+        st.markdown('<div class="clean-card">', unsafe_allow_html=True)
+        st.markdown("### Issue Municipal Carbon Credits")
+        st.write("Generate official ESG audit certificates for international carbon trading boards:")
+        if st.button("MINT VERIFIED ESG CREDITS"):
+            with st.spinner("Generating cryptographic proof-of-work on municipal ledger..."):
+                time.sleep(1)
+            st.success("Successfully minted 142.5 Verified Carbon Units (VCUs) for Trivandrum Ward 1.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ================= PAGE 6: CITIZEN HUB =================
 elif st.session_state.current_page == "📢 Citizen Vigil Hub":
     st.markdown("""
         <div class="animated-page">
@@ -422,7 +535,7 @@ elif st.session_state.current_page == "📢 Citizen Vigil Hub":
             st.markdown("<hr style='border-color: #1A1A1A; margin: 8px 0;'>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= PAGE 4: SEVERITY & COST ESTIMATOR =================
+# ================= PAGE 7: SEVERITY & COST ESTIMATOR =================
 elif st.session_state.current_page == "💰 Severity & Cost Estimator":
     st.markdown("""
         <div class="animated-page">
@@ -455,7 +568,7 @@ elif st.session_state.current_page == "💰 Severity & Cost Estimator":
         st.success("✅ Standard quick-patch cold mix sufficient.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ================= PAGE 5: CAPABILITIES MATRIX =================
+# ================= PAGE 8: CAPABILITIES MATRIX =================
 elif st.session_state.current_page == "🚀 Capabilities Matrix":
     st.markdown("""
         <div class="animated-page">
@@ -464,19 +577,19 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
         </div>
     """, unsafe_allow_html=True)
 
-    tab1, tab2, tab3 = st.tabs(["🌟 Core Innovations", "🏛️ Municipal Features", "🚗 V2I & Safety Tools"])
+    tab1, tab2, tab3 = st.tabs(["🌟 Next-Gen Deep Tech", "🏛️ Municipal Features", "🚗 V2I & Safety Tools"])
     
     with tab1:
         st.markdown("""
             <div class="clean-card">
-                <h3>1. YOLOv8 Neural Vision Engine</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Advanced computer vision pipeline trained specifically to isolate sub-surface road cracking, structural edge breaks, and potholes with 99.4% accuracy.</p>
+                <h3>1. Sub-Surface Acoustic Sonar Lab</h3>
+                <p style="color:#aaa; font-size:0.85rem;">Predicts hidden sub-base voids and sinkholes weeks before surface cracks form by analyzing tire vibration frequencies.</p>
                 <hr style="border-color:#222;">
-                <h3>2. Dynamic Severity & Cost Calculator</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Instantly transforms pixel bounding box metrics into asphalt volume calculations and precise municipal repair budgets in real time.</p>
+                <h3>2. Smart-Cure V2I Material Trigger</h3>
+                <p style="color:#aaa; font-size:0.85rem;">Automatically triggers electromagnetic induction pulses via roadside units to activate self-healing polymer asphalt under heavy trucks.</p>
                 <hr style="border-color:#222;">
-                <h3>3. Crowdsourced Verification Loop</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Prevents false positives through community-driven validation feeds where everyday drivers confirm active hazard placements.</p>
+                <h3>3. Carbon Credit Ledger & ESG Monetization</h3>
+                <p style="color:#aaa; font-size:0.85rem;">Converts avoided hot-mix bitumen reconstruction into cryptographic carbon offsets for municipal green funding.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -488,9 +601,6 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
                 <hr style="border-color:#222;">
                 <h3>2. Preventative Economics Engine</h3>
                 <p style="color:#aaa; font-size:0.85rem;">Shifts public works budgeting from expensive reactive reconstruction (₹4.5 Cr) to proactive micro-interventions (₹1.8 Cr).</p>
-                <hr style="border-color:#222;">
-                <h3>3. UN SDG Impact Framework</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Direct alignment metrics tracking performance against UN Sustainable Development Goals 9 (Industry), 11 (Cities), and 12 (Consumption).</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -505,7 +615,7 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
             </div>
         """, unsafe_allow_html=True)
 
-# ================= PAGE 6: FINANCIALS =================
+# ================= PAGE 9: FINANCIALS =================
 elif st.session_state.current_page == "📊 Financial Economics":
     st.markdown("""
         <div class="animated-page">
@@ -532,7 +642,7 @@ elif st.session_state.current_page == "📊 Financial Economics":
             </div>
         """, unsafe_allow_html=True)
 
-# ================= PAGE 7: SDG IMPACT =================
+# ================= PAGE 10: SDG IMPACT =================
 elif st.session_state.current_page == "🏆 UN SDG Impact":
     st.markdown("""
         <div class="animated-page">
