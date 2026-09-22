@@ -260,7 +260,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🔊 Sub-Surface Acoustic Lab</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Ground-penetrating vibration profiling to predict sinkholes before surface cracks appear.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN ACOUSTIC LAB", key="btn_acou"):
@@ -271,7 +271,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">⚡ Smart-Cure V2I Trigger</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Automated vehicle-to-infrastructure trigger for self-healing polymer asphalt activation.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN SMART-CURE TRIGGER", key="btn_cure"):
@@ -281,7 +281,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🌱 Carbon Credit Ledger</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Cryptographic ESG audit reports and municipal carbon credit issuance.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN CARBON LEDGER", key="btn_carb"):
@@ -391,7 +391,7 @@ elif st.session_state.current_page == "🔊 Sub-Surface Acoustic Lab":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>SUB-SURFACE ACOUSTIC SONAR LAB</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Listening Inside the Earth: Predicting Invisible Cavities & Sinkholes Before Surface Cracking Occurs.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -429,7 +429,7 @@ elif st.session_state.current_page == "⚡ Smart-Cure V2I Trigger":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>SMART-CURE V2I MATERIAL TRIGGER</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Autonomous V2I Communication: Triggering Self-Healing Polymer Asphalt Via Roadside Units.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -467,7 +467,7 @@ elif st.session_state.current_page == "🌱 Carbon Credit Ledger":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>MUNICIPAL CARBON CREDIT LEDGER</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Automated ESG Monetization: Cryptographic Auditing of Avoided Road Reconstruction Emissions.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -583,13 +583,13 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
         st.markdown("""
             <div class="clean-card">
                 <h3>1. Sub-Surface Acoustic Sonar Lab</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Predicts hidden sub-base voids and sinkholes weeks before surface cracks form by analyzing tire vibration frequencies.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
                 <hr style="border-color:#222;">
                 <h3>2. Smart-Cure V2I Material Trigger</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Automatically triggers electromagnetic induction pulses via roadside units to activate self-healing polymer asphalt under heavy trucks.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
                 <hr style="border-color:#222;">
                 <h3>3. Carbon Credit Ledger & ESG Monetization</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Converts avoided hot-mix bitumen reconstruction into cryptographic carbon offsets for municipal green funding.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
             </div>
         """, unsafe_allow_html=True)
 
@@ -637,28 +637,42 @@ elif st.session_state.current_page == "📊 Financial Economics":
         st.markdown("""
             <div class="clean-card" style="border-top-color: #D4AF37;">
                 <h3 style="color: #D4AF37 !important; font-size: 1.15rem;">RoadX AI Preventative Model</h3>
-                <h2 style="color: #D4AF37 !important; font-size: 1.8rem; margin: 8px 0;">₹1.8 Crores <span style="font-size:0.85rem; color:#10B981;">(-60%)</span></h2>
-                <p style="color: #888; font-size: 0.83rem; line-height: 1.6;">AI-driven targeted micro-interventions executed prior to structural failure, extending road lifespans by 3.5x.</p>
+                <h2 style="color: #D4AF37 !important; font-size: 1.8rem; margin: 8px 0;">₹1.8 Crores / yr</h2>
+                <p style="color: #888; font-size: 0.83rem; line-height: 1.6;">Achieved via targeted micro-sealing, acoustic void injection, and AI predictive maintenance, saving over 60% in municipal infrastructure overhead.</p>
             </div>
         """, unsafe_allow_html=True)
 
-# ================= PAGE 10: SDG IMPACT =================
+# ================= PAGE 10: UN SDG IMPACT =================
 elif st.session_state.current_page == "🏆 UN SDG Impact":
     st.markdown("""
         <div class="animated-page">
-            <h1 style='font-size: 2rem; margin-bottom: 2px;'>UN SDG SUSTAINABILITY IMPACT</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Quantifiable Alignment with United Nations Global Development Goals.</p>
+            <h1 style='font-size: 2rem; margin-bottom: 2px;'>UN SUSTAINABLE DEVELOPMENT GOALS</h1>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Aligning Municipal Infrastructure Intelligence with Global ESG & Sustainability Standards.</p>
         </div>
     """, unsafe_allow_html=True)
-    
-    s1, s2, s3 = st.columns(3)
-    with s1:
-        st.markdown('<div class="clean-card"><h3>SDG 9</h3><p style="color:#888; font-size:0.83rem; margin-top:8px;">Industry, Innovation & Infrastructure: Resilient infrastructure created via early-warning computer vision.</p></div>', unsafe_allow_html=True)
-    with s2:
-        st.markdown('<div class="clean-card"><h3>SDG 11</h3><p style="color:#888; font-size:0.83rem; margin-top:8px;">Sustainable Cities: Decreasing two-wheeler accident vulnerabilities in high-density urban transit corridors.</p></div>', unsafe_allow_html=True)
-    with s3:
-        st.markdown('<div class="clean-card"><h3>SDG 12</h3><p style="color:#888; font-size:0.83rem; margin-top:8px;">Responsible Consumption: Reducing bitumen waste by replacing full-road relaying with micro-treatments.</p></div>', unsafe_allow_html=True)
 
-# Minimal Footer
-st.markdown("---")
-st.markdown("<p style='text-align: center; color: #444; font-size: 0.72rem; letter-spacing: 1px;'>ROADX AI — TRIVANDRUM MUNICIPAL PILOT CONTROL</p>", unsafe_allow_html=True)
+    sdg1, sdg2, sdg3 = st.columns(3)
+    
+    with sdg1:
+        st.markdown("""
+            <div class="clean-card">
+                <h3 style="font-size: 1.05rem; color: #D4AF37;">SDG 9: Industry & Innovation</h3>
+                <p style="color: #aaa; font-size: 0.83rem; margin-top: 8px;">Upgrading municipal infrastructure with resilient AI computer vision, IoT sensors, and automated V2I communication networks.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+    with sdg2:
+        st.markdown("""
+            <div class="clean-card">
+                <h3 style="font-size: 1.05rem; color: #D4AF37;">SDG 11: Sustainable Cities</h3>
+                <p style="color: #aaa; font-size: 0.83rem; margin-top: 8px;">Enhancing commuter safety across multi-vehicle classes, reducing severe accidents, and preventing urban sinkhole collapses.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+    with sdg3:
+        st.markdown("""
+            <div class="clean-card">
+                <h3 style="font-size: 1.05rem; color: #D4AF37;">SDG 13: Climate Action</h3>
+                <p style="color: #aaa; font-size: 0.83rem; margin-top: 8px;">Quantifying and tokenizing avoided carbon emissions from heavy hot-mix asphalt manufacturing and heavy transport logistics.</p>
+            </div>
+        """, unsafe_allow_html=True)
