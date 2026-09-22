@@ -11,7 +11,7 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 # Page Configuration
 st.set_page_config(
-    page_title="ROADGUARD AI 2.0 | Executive Infrastructure Control",
+    page_title="ROADX AI | Executive Infrastructure Control",
     page_icon="⚜️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -174,8 +174,8 @@ with st.sidebar:
     else:
         st.markdown("""
             <div style="text-align: center; padding: 10px 0;">
-                <h3 style="font-size: 1.05rem; letter-spacing: 2px; color: #F3E5AB; margin-top: 4px;">ROADGUARD</h3>
-                <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">AI 2.0 EXECUTIVE</p>
+                <h3 style="font-size: 1.15rem; letter-spacing: 2px; color: #F3E5AB; margin-top: 4px;">ROADX AI</h3>
+                <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">EXECUTIVE INFRASTRUCTURE</p>
             </div>
         """, unsafe_allow_html=True)
     
@@ -224,7 +224,7 @@ def render_risk_badge(risk_text):
 if st.session_state.current_page == "🏠 Executive Overview":
     st.markdown("""
         <div class="animated-page">
-            <h1 style='font-size: 2.2rem; margin-bottom: 2px;'>ROADGUARD AI 2.0</h1>
+            <h1 style='font-size: 2.2rem; margin-bottom: 2px;'>ROADX AI</h1>
             <p style='color: #888; font-size: 0.95rem; margin-bottom: 25px;'>Trivandrum Municipal Pilot: Autonomous Infrastructure Health & Multi-Vehicle Safety Intelligence.</p>
         </div>
     """, unsafe_allow_html=True)
@@ -372,7 +372,7 @@ elif st.session_state.current_page == "👁️ Neural Vision Lab":
                 
                 st.markdown("""
                     <div style="padding: 12px; border-left: 2px solid #D4AF37; margin-top: 12px; font-size: 0.88rem; line-height: 1.8;">
-                        <b>Model Network:</b> YOLOv8-Pavement-X<br>
+                        <b>Model Network:</b> RoadX-YOLOv8-X<br>
                         <b>Pothole Detection Confidence:</b> <span style="color:#D4AF37;">98.2%</span><br>
                         <b>Sub-surface Cracking Index:</b> Critical (0.84)<br>
                         <b>Estimated Repair Cost:</b> ₹3,450 (Material & Labor)<br>
@@ -460,7 +460,7 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>SYSTEM CAPABILITIES DIRECTORY</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Comprehensive breakdown of core features, advanced innovations, and municipal modules provided by ROADGUARD AI 2.0.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Comprehensive breakdown of core features, advanced innovations, and municipal modules provided by RoadX AI.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -526,7 +526,7 @@ elif st.session_state.current_page == "📊 Financial Economics":
     with p2:
         st.markdown("""
             <div class="clean-card" style="border-top-color: #D4AF37;">
-                <h3 style="color: #D4AF37 !important; font-size: 1.15rem;">ROADGUARD AI Preventative Model</h3>
+                <h3 style="color: #D4AF37 !important; font-size: 1.15rem;">RoadX AI Preventative Model</h3>
                 <h2 style="color: #D4AF37 !important; font-size: 1.8rem; margin: 8px 0;">₹1.8 Crores <span style="font-size:0.85rem; color:#10B981;">(-60%)</span></h2>
                 <p style="color: #888; font-size: 0.83rem; line-height: 1.6;">AI-driven targeted micro-interventions executed prior to structural failure, extending road lifespans by 3.5x.</p>
             </div>
@@ -551,4 +551,4 @@ elif st.session_state.current_page == "🏆 UN SDG Impact":
 
 # Minimal Footer
 st.markdown("---")
-st.markdown("<p style='text-align: center; color: #444; font-size: 0.72rem; letter-spacing: 1px;'>ROADGUARD AI 2.0 — TRIVANDRUM MUNICIPAL PILOT CONTROL</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #444; font-size: 0.72rem; letter-spacing: 1px;'>ROADX AI — TRIVANDRUM MUNICIPAL PILOT CONTROL</p>", unsafe_allow_html=True)
