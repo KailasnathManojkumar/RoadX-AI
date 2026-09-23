@@ -21,14 +21,16 @@ st.set_page_config(
 if "current_page" not in st.session_state:
     st.session_state.current_page = "🏠 Executive Overview"
 
-# High-End Ultra Minimalist Dark Theme (Glass & Gold Styling + Rich Sidebar HUD)
+# High-End Dark Theme with Fixed Padding & Navigation Pill Bar Styling
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@500;600;700&display=swap');
 
         /* Global Background & Typography */
         .main { background-color: #080808; color: #E2E8F0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .block-container { padding: 1.2rem 2.2rem 3rem 2.2rem; max-width: 100%; }
+        
+        /* FIX: Increased top padding so elements are never hidden behind Streamlit header */
+        .block-container { padding: 3.5rem 2.2rem 3rem 2.2rem; max-width: 100%; }
         
         h1, h2, h3, h4 { color: #F8FAFC !important; font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
         p, span, label, div { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -236,7 +238,14 @@ with st.sidebar:
         </div>
     """, unsafe_allow_html=True)
 
-# --- UNIQUE ANIMATED HORIZONTAL PILL NAVIGATION BAR ---
+# --- FULLY VISIBLE TOP NAVIGATION BAR ---
+st.markdown("""
+    <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid #22221B; border-radius: 8px; padding: 10px 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #D4AF37; letter-spacing: 1px; font-weight: 600;">🧭 SYSTEM MODULE SELECTOR</span>
+        <span style="font-size: 0.75rem; color: #888;">Select an operational module below</span>
+    </div>
+""", unsafe_allow_html=True)
+
 nav_options = [
     "🏠 Overview",
     "🏛️ Command", 
@@ -251,7 +260,6 @@ nav_options = [
     "🏆 UN SDG"
 ]
 
-# Map back labels to internal state keys
 label_to_state = {
     "🏠 Overview": "🏠 Executive Overview",
     "🏛️ Command": "🏛️ Municipal Command",
@@ -269,15 +277,24 @@ label_to_state = {
 state_to_label = {v: k for k, v in label_to_state.items()}
 current_label = state_to_label.get(st.session_state.current_page, "🏠 Overview")
 
-# Render selector
-selected_tab = st.selectbox("🧭 **System Module Navigation**", nav_options, index=nav_options.index(current_label), label_visibility="collapsed")
-target_state = label_to_state[selected_tab]
+# Render selectbox cleanly inside a visible container row
+col_sel_1, col_sel_2 = st.columns([3, 1])
+with col_sel_1:
+    selected_tab = st.selectbox("Switch Active Module", nav_options, index=nav_options.index(current_label), label_visibility="collapsed")
+with col_sel_2:
+    if st.button("🚀 GO TO MODULE", key="btn_switch_module"):
+        target_state = label_to_state[selected_tab]
+        if target_state != st.session_state.current_page:
+            st.session_state.current_page = target_state
+            st.rerun()
 
+# Auto-switch when selectbox changes
+target_state = label_to_state[selected_tab]
 if target_state != st.session_state.current_page:
     st.session_state.current_page = target_state
     st.rerun()
 
-st.markdown("<hr style='border-color: #1E1E1E; margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
+st.markdown("<hr style='border-color: #1E1E1E; margin: 15px 0 25px 0;'>", unsafe_allow_html=True)
 
 # Helper for vehicle badge rendering
 def render_risk_badge(risk_text):
@@ -386,7 +403,7 @@ elif st.session_state.current_page == "🏛️ Municipal Command":
     with col_details:
         st.markdown("### Multi-Vehicle Safety Evaluation")
         st.markdown('<div class="clean-card">', unsafe_allow_html=True)
-        sel_id = st.selectbox("Select Asset ID:", df["Road_ID"])
+        sel_id = st.selectbox("Select Asset ID:", df["Road_ID"], key="sel_asset_id")
         r_info = df[df["Road_ID"] == sel_id].iloc[0]
         
         st.markdown(f"""
@@ -464,8 +481,8 @@ elif st.session_state.current_page == "🔊 Sub-Surface Acoustic Lab":
     with col_ac1:
         st.markdown('<div class="clean-card">', unsafe_allow_html=True)
         st.markdown("### Acoustic Resonance Profiler")
-        sel_corridor = st.selectbox("Select Test Corridor:", ["MC Road Sector B (Ulloor)", "NH-66 Kazhakkoottam Underpass", "Kowdiar Junction Ring"])
-        sweep_speed = st.slider("Vehicle Fleet Roll Speed (km/h)", 20, 80, 45)
+        sel_corridor = st.selectbox("Select Test Corridor:", ["MC Road Sector B (Ulloor)", "NH-66 Kazhakkoottam Underpass", "Kowdiar Junction Ring"], key="sel_acou_corridor")
+        sweep_speed = st.slider("Vehicle Fleet Roll Speed (km/h)", 20, 80, 45, key="slider_sweep_speed")
         
         if st.button("EXECUTE SUB-SURFACE ACOUSTIC SCAN"):
             with st.spinner("Analyzing tire vibration frequencies and acoustic dampening profiles..."):
@@ -502,8 +519,8 @@ elif st.session_state.current_page == "⚡ Smart-Cure V2I Trigger":
     with c_tr1:
         st.markdown('<div class="clean-card">', unsafe_allow_html=True)
         st.markdown("### High-Stress Load Zone Config")
-        truck_weight = st.slider("Approaching Heavy Axle Load (Tons)", 10, 45, 32)
-        polymer_status = st.selectbox("Embedded Microcapsule Status", ["Active (Ready to Bond)", "Depleted", "Regenerating"])
+        truck_weight = st.slider("Approaching Heavy Axle Load (Tons)", 10, 45, 32, key="slider_truck_weight")
+        polymer_status = st.selectbox("Embedded Microcapsule Status", ["Active (Ready to Bond)", "Depleted", "Regenerating"], key="sel_poly_status")
         
         if st.button("SEND V2I INDUCTION PULSE"):
             with st.spinner("Broadcasting low-frequency induction pulse via roadside unit..."):
@@ -612,9 +629,9 @@ elif st.session_state.current_page == "💰 Severity & Cost Estimator":
     st.markdown('<div class="clean-card">', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
-        width_cm = st.slider("Pothole Diameter / Width (cm)", 10, 300, 60)
+        width_cm = st.slider("Pothole Diameter / Width (cm)", 10, 300, 60, key="slider_width_cm")
     with c2:
-        depth_cm = st.slider("Pothole Depth (cm)", 2, 70, 15)
+        depth_cm = st.slider("Pothole Depth (cm)", 2, 70, 15, key="slider_depth_cm")
 
     volume_liters = (width_cm * width_cm * depth_cm) / 1000
     material_cost = volume_liters * 2.75
