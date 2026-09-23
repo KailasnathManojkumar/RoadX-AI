@@ -78,23 +78,24 @@ st.markdown("""
             transform: translateY(-3px);
         }
 
-        /* Luxury Gold Pill Buttons */
+        /* High-Visibility Black Text on Gold Pill Buttons */
         .stButton>button {
-            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
-            color: #050508 !important;
+            background: linear-gradient(135deg, #DFB942 0%, #C4A130 100%) !important;
+            color: #000000 !important;
             font-family: 'Cinzel', serif !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
             text-transform: uppercase !important;
             border-radius: 8px !important;
-            border: none !important;
-            padding: 0.6rem 1rem !important;
+            border: 1px solid #FFE57F !important;
+            padding: 0.5rem 0.2rem !important;
             width: 100%;
-            font-size: 0.8rem !important;
-            letter-spacing: 1.5px !important;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            font-size: 0.72rem !important;
+            letter-spacing: 0.5px !important;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
         .stButton>button:hover {
-            background: linear-gradient(135deg, #E6C552 / 100%, #D4AF37 100%) !important;
+            background: linear-gradient(135deg, #F0C94F 0%, #D4AF37 100%) !important;
+            color: #000000 !important;
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
         }
 
@@ -138,11 +139,11 @@ st.markdown("""
 
 nav_cols = st.columns(9)
 pages = ["Overview", "Command", "Vision Lab", "Acoustic", "Smart-Cure", "Carbon", "Citizen", "Cost", "Finance"]
-page_icons = ["🏠 Overview", "🏛️ Command", "👁️ Vision", "🔊 Acoustic", "⚡ Smart-Cure", "🌱 Carbon", "📢 Citizen", "💰 Cost", "📊 Finance"]
+page_labels = ["Overview", "Command", "Vision", "Acoustic", "Smart-Cure", "Carbon", "Citizen", "Cost", "Finance"]
 
 for i, col in enumerate(nav_cols):
     with col:
-        if st.button(page_icons[i]):
+        if st.button(page_labels[i]):
             st.session_state.current_page = pages[i]
             st.rerun()
 
