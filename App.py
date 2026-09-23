@@ -64,7 +64,7 @@ st.markdown("""
         /* Luxury Gold-Bordered Cards */
         .sleek-card {
             background: linear-gradient(145deg, rgba(20, 20, 25, 0.8) 0%, rgba(8, 8, 12, 0.95) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.25);
             border-radius: 16px;
             padding: 28px;
             margin-bottom: 20px;
@@ -73,30 +73,32 @@ st.markdown("""
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .sleek-card:hover {
-            border-color: rgba(212, 175, 55, 0.6);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.8);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
             transform: translateY(-3px);
         }
 
-        /* High-Visibility Black Text on Gold Pill Buttons */
+        /* High-Visibility Custom Streamlit Buttons */
         .stButton>button {
-            background: linear-gradient(135deg, #DFB942 0%, #C4A130 100%) !important;
-            color: #000000 !important;
+            background: linear-gradient(135deg, #1A1A22 0%, #111116 100%) !important;
+            color: #FFFFFF !important;
             font-family: 'Cinzel', serif !important;
-            font-weight: 800 !important;
+            font-weight: 700 !important;
             text-transform: uppercase !important;
-            border-radius: 8px !important;
-            border: 1px solid #FFE57F !important;
-            padding: 0.5rem 0.2rem !important;
+            border-radius: 10px !important;
+            border: 1px solid rgba(212, 175, 55, 0.4) !important;
+            padding: 0.6rem 0.4rem !important;
             width: 100%;
-            font-size: 0.72rem !important;
-            letter-spacing: 0.5px !important;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            font-size: 0.75rem !important;
+            letter-spacing: 1px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease-in-out;
         }
         .stButton>button:hover {
-            background: linear-gradient(135deg, #F0C94F 0%, #D4AF37 100%) !important;
+            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
             color: #000000 !important;
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+            border-color: #D4AF37 !important;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
         p, span, div, label { color: #94A3B8; font-size: 1.02rem; line-height: 1.6; }
@@ -129,9 +131,9 @@ if "community_reports" not in st.session_state:
 df = st.session_state.road_data
 df["color"] = df["Health_Score"].apply(lambda x: [10, 185, 129, 220] if x >= 75 else ([245, 158, 11, 220] if x >= 40 else [239, 68, 68, 220]))
 
-# --- TOP HEADER & LAPTOP-FRIENDLY GOLD NAVBAR ---
+# --- TOP HEADER & HIGH-CONTRAST NAVBAR ---
 st.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 15px; margin-bottom: 25px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.25); padding-bottom: 15px; margin-bottom: 25px;">
         <div class="brand-title">ROADX<span>.AI</span></div>
         <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #D4AF37; letter-spacing: 2px;">SECURE ENTERPRISE HUD</div>
     </div>
@@ -143,9 +145,15 @@ page_labels = ["Overview", "Command", "Vision", "Acoustic", "Smart-Cure", "Carbo
 
 for i, col in enumerate(nav_cols):
     with col:
-        if st.button(page_labels[i]):
-            st.session_state.current_page = pages[i]
-            st.rerun()
+        # Highlight active page button dynamically
+        if st.session_state.current_page == pages[i]:
+            if st.button(f"✨ {page_labels[i]}"):
+                st.session_state.current_page = pages[i]
+                st.rerun()
+        else:
+            if st.button(page_labels[i]):
+                st.session_state.current_page = pages[i]
+                st.rerun()
 
 st.markdown("<div style='margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05);'></div>", unsafe_allow_html=True)
 
@@ -304,7 +312,7 @@ elif page == "Finance":
 
 # --- FOOTER ---
 st.markdown("""
-    <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 60px; padding-top: 30px; text-align: center;">
+    <div style="border-top: 1px solid rgba(212,175,55,0.25); margin-top: 60px; padding-top: 30px; text-align: center;">
         <div style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #D4AF37; letter-spacing: 2px;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
     </div>
 """, unsafe_allow_html=True)
