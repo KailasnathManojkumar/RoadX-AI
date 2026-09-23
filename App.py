@@ -14,31 +14,31 @@ st.set_page_config(
     page_title="ROADX AI | Executive Infrastructure Control",
     page_icon="⚜️",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Initialize Session Navigation State
 if "current_page" not in st.session_state:
     st.session_state.current_page = "🏠 Executive Overview"
 
-# High-End Ultra Minimalist Dark Theme (Zero Black Boxes, Glass & Gold Styling + Animated Header Nav)
+# High-End Ultra Minimalist Dark Theme (Glass & Gold Styling + Rich Sidebar HUD)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@500;600;700&display=swap');
 
         /* Global Background & Typography */
         .main { background-color: #080808; color: #E2E8F0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .block-container { padding: 1.5rem 2.5rem 3rem 2.5rem; max-width: 100%; }
+        .block-container { padding: 1.2rem 2.2rem 3rem 2.2rem; max-width: 100%; }
         
         h1, h2, h3, h4 { color: #F8FAFC !important; font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
         p, span, label, div { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         /* Page Entrance Animation */
         @keyframes pageEntrance {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animated-page { animation: pageEntrance 0.45s ease-out forwards; }
+        .animated-page { animation: pageEntrance 0.4s ease-out forwards; }
 
         /* Premium Minimalist Border Cards */
         .clean-card {
@@ -106,10 +106,32 @@ st.markdown("""
         .risk-mod { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
         .risk-high { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* Sidebar Styling */
+        /* Sidebar Rich HUD Styling */
         section[data-testid="stSidebar"] {
             background-color: #050505;
             border-right: 1px solid #181818;
+            padding-top: 0.5rem;
+        }
+        
+        .sidebar-hud-box {
+            background: rgba(212, 175, 55, 0.03);
+            border: 1px solid #22221B;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        /* Pulse animation for live connection indicator */
+        @keyframes pulseGlow {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.96); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .live-dot {
+            height: 8px; width: 8px; background-color: #10B981; border-radius: 50%;
+            display: inline-block; box-shadow: 0 0 8px #10B981;
+            animation: pulseGlow 2s infinite ease-in-out;
+            margin-right: 6px;
         }
 
         /* Primary Buttons */
@@ -167,25 +189,50 @@ def get_color(score):
 
 df["color"] = df["Health_Score"].apply(get_color)
 
-# --- MINIMAL CLEAN SIDEBAR (Branding & Pilot Metadata Only) ---
+# --- RICH EXECUTIVE SIDEBAR HUD ---
 with st.sidebar:
     st.markdown("""
-        <div style="text-align: center; padding: 15px 0 5px 0;">
-            <h3 style="font-size: 1.25rem; letter-spacing: 2.5px; color: #F3E5AB; margin-bottom: 2px;">ROADX AI</h3>
-            <p style="font-size: 0.58rem; color: #666; letter-spacing: 3px; text-transform: uppercase;">EXECUTIVE CONTROL</p>
+        <div style="text-align: center; padding: 10px 0 2px 0;">
+            <h3 style="font-size: 1.35rem; letter-spacing: 3px; color: #F3E5AB; margin-bottom: 2px;">ROADX AI</h3>
+            <p style="font-size: 0.6rem; color: #888; letter-spacing: 3.5px; text-transform: uppercase;">EXECUTIVE CONTROL HUD</p>
         </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<hr style='border-color: #1A1A1A; margin: 15px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color: #1E1E1E; margin: 12px 0;'>", unsafe_allow_html=True)
     
     st.markdown("""
-        <div style="padding: 12px; border-radius: 6px; border: 1px solid #1C1C1C; background: rgba(255,255,255,0.01);">
-            <div style="font-size: 0.68rem; color: #888; letter-spacing: 1px;">ACTIVE DEPLOYMENT ZONE</div>
-            <div style="font-size: 0.85rem; font-weight: 600; color: #D4AF37; margin-top: 3px;">TRIVANDRUM WARD 1</div>
-            <div style="font-size: 0.68rem; color: #666; margin-top: 6px;">Kerala Public Works Dept.</div>
-            <hr style="border-color: #222; margin: 8px 0;">
-            <div style="font-size: 0.68rem; color: #888;">AI MODEL: YOLOv8-X Tensor</div>
-            <div style="font-size: 0.68rem; color: #888; margin-top: 2px;">V2I Beacon: Online (50m Radius)</div>
+        <div class="sidebar-hud-box">
+            <div style="font-size: 0.65rem; color: #999; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600;">Deployment Zone</div>
+            <div style="font-size: 0.9rem; font-weight: 700; color: #D4AF37; margin-top: 4px;">TRIVANDRUM WARD 1</div>
+            <div style="font-size: 0.7rem; color: #777; margin-top: 2px;">Kerala Public Works Dept.</div>
+            <hr style="border-color: #262620; margin: 8px 0;">
+            <div style="font-size: 0.68rem; color: #aaa; display: flex; align-items: center; margin-top: 4px;">
+                <span class="live-dot"></span> V2I Beacon: <b style="color: #10B981; margin-left: 4px;">Online</b>
+            </div>
+            <div style="font-size: 0.68rem; color: #aaa; margin-top: 4px;">⚡ AI Core: YOLOv8-Tensor (v4.2)</div>
+            <div style="font-size: 0.68rem; color: #aaa; margin-top: 4px;">🛰️ GPS Lock: 8.5241° N, 76.9366° E</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+        <div class="sidebar-hud-box">
+            <div style="font-size: 0.65rem; color: #999; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600;">System Telemetry</div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 6px; color: #ccc;">
+                <span>Active Sensors:</span> <b style="color: #D4AF37;">54 Nodes</b>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 4px; color: #ccc;">
+                <span>GPU Load:</span> <b style="color: #10B981;">34% (Optimized)</b>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 4px; color: #ccc;">
+                <span>Latency:</span> <b style="color: #F3E5AB;">14 ms</b>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+        <div style="padding: 10px; text-align: center; border: 1px dashed #222; border-radius: 6px; margin-top: 20px;">
+            <div style="font-size: 0.65rem; color: #666; text-transform: uppercase;">Security Clearance</div>
+            <div style="font-size: 0.78rem; color: #D4AF37; font-weight: 600; margin-top: 2px;">LEVEL-4 MUNICIPAL ADMIN</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -220,10 +267,9 @@ label_to_state = {
 }
 
 state_to_label = {v: k for k, v in label_to_state.items()}
-
 current_label = state_to_label.get(st.session_state.current_page, "🏠 Overview")
 
-# Render custom selector using Streamlit selectbox/radio styled horizontally via layout columns or selectbox
+# Render selector
 selected_tab = st.selectbox("🧭 **System Module Navigation**", nav_options, index=nav_options.index(current_label), label_visibility="collapsed")
 target_state = label_to_state[selected_tab]
 
@@ -279,7 +325,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🔊 Sub-Surface Acoustic Lab</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN ACOUSTIC LAB", key="btn_acou"):
@@ -290,7 +336,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">⚡ Smart-Cure V2I Trigger</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN SMART-CURE TRIGGER", key="btn_cure"):
@@ -300,7 +346,7 @@ if st.session_state.current_page == "🏠 Executive Overview":
         st.markdown("""
             <div class="nav-card" style="margin-top: 15px;">
                 <h3 style="font-size: 1.1rem; margin-bottom: 4px;">🌱 Carbon Credit Ledger</h3>
-                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
+                <p style="color: #888; font-size: 0.83rem; margin-bottom: 12px;">Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal credits.</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button("OPEN CARBON LEDGER", key="btn_carb"):
@@ -335,7 +381,7 @@ elif st.session_state.current_page == "🏛️ Municipal Command":
             api_keys={"mapbox": MAPBOX_TOKEN},
             tooltip={"text": "Asset ID: {Road_ID}\nLocation: {Location}\nHealth Score: {Health_Score}/100"}
         )
-        st.pydeck_chart(deck)
+        st.pydeck_chart(deck, use_container_width=True)
         
     with col_details:
         st.markdown("### Multi-Vehicle Safety Evaluation")
@@ -410,7 +456,7 @@ elif st.session_state.current_page == "🔊 Sub-Surface Acoustic Lab":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>SUB-SURFACE ACOUSTIC SONAR LAB</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -448,7 +494,7 @@ elif st.session_state.current_page == "⚡ Smart-Cure V2I Trigger":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>SMART-CURE V2I MATERIAL TRIGGER</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -486,7 +532,7 @@ elif st.session_state.current_page == "🌱 Carbon Credit Ledger":
     st.markdown("""
         <div class="animated-page">
             <h1 style='font-size: 2rem; margin-bottom: 2px;'>MUNICIPAL CARBON CREDIT LEDGER</h1>
-            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
+            <p style='color: #888; font-size: 0.9rem; margin-bottom: 25px;'>Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -602,13 +648,13 @@ elif st.session_state.current_page == "🚀 Capabilities Matrix":
         st.markdown("""
             <div class="clean-card">
                 <h3>1. Sub-Surface Acoustic Sonar Lab</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Acoustic Sub-Surface Sonar Lab: Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes weeks before they visually appear.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Simulates real-time ground-penetrating acoustic resonance scans to predict hidden sub-surface hollows and sinkholes.</p>
                 <hr style="border-color:#222;">
                 <h3>2. Smart-Cure V2I Material Trigger</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Smart-Cure Material Trigger: Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Simulates direct vehicle-to-infrastructure (V2I) micro-induction triggers that activate self-healing asphalt polymers.</p>
                 <hr style="border-color:#222;">
                 <h3>3. Carbon Credit Ledger & ESG Monetization</h3>
-                <p style="color:#aaa; font-size:0.85rem;">Carbon-Credit Ledger & ESG Monetization: Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal carbon offset credits.</p>
+                <p style="color:#aaa; font-size:0.85rem;">Automatically calculates avoided carbon emissions from preventative maintenance and converts them into verified municipal credits.</p>
             </div>
         """, unsafe_allow_html=True)
 
