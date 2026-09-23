@@ -11,24 +11,24 @@ pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 st.set_page_config(
     page_title="ROADX AI | Enterprise Platform",
-    page_icon="⚡",
-    layout="wide", # Switch to wide layout so laptops/desktops use full space comfortably
+    page_icon="⚜️",
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# --- DEFINE-STYLE & LAPTOP-FRIENDLY CSS INJECTION ---
+# --- LUXURY GOLD & BLACK THEME CSS ---
 st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
-        /* Pure Pitch Black Theme */
+        /* Rich Pitch Black & Gold Theme */
         html, body, [data-testid="stAppViewContainer"] {
-            background-color: #000000 !important;
-            color: #FFFFFF !important;
-            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050508 !important;
+            color: #F1F5F9 !important;
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Adaptive width for laptop screens while maintaining clean margins */
+        /* Adaptive width for laptop screens */
         .block-container {
             max-width: 1200px !important;
             padding-top: 2rem !important;
@@ -39,60 +39,66 @@ st.markdown("""
 
         #MainMenu, footer, header {visibility: hidden;}
 
-        /* Brutalist / Modern Crimson Branding */
+        /* Cinematic Gold Branding */
         .brand-title {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Cinzel', serif;
             font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -2px;
-            color: #FFFFFF;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #D4AF37;
             text-transform: uppercase;
         }
-        .brand-title span { color: #FF1E38; }
+        .brand-title span { color: #FFFFFF; }
 
         .section-heading {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.6rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: -1px;
+            letter-spacing: 1px;
             margin-top: 2.5rem;
             margin-bottom: 1rem;
             color: #FFFFFF;
         }
 
-        /* Sleek Red-Border Cards */
+        /* Luxury Gold-Bordered Cards */
         .sleek-card {
-            background: #0A0A0A;
-            border: 1px solid rgba(255, 30, 56, 0.25);
-            border-radius: 12px;
-            padding: 24px;
+            background: linear-gradient(145deg, rgba(20, 20, 25, 0.8) 0%, rgba(8, 8, 12, 0.95) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 28px;
             margin-bottom: 20px;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             height: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .sleek-card:hover {
-            border-color: #FF1E38;
-            box-shadow: 0 0 25px rgba(255, 30, 56, 0.15);
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            transform: translateY(-3px);
         }
 
-        /* Pill Buttons */
+        /* Luxury Gold Pill Buttons */
         .stButton>button {
-            background-color: #FF1E38 !important;
-            color: #FFFFFF !important;
-            font-family: 'JetBrains Mono', monospace !important;
+            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
+            color: #050508 !important;
+            font-family: 'Cinzel', serif !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
-            border-radius: 6px !important;
+            border-radius: 8px !important;
             border: none !important;
             padding: 0.6rem 1rem !important;
             width: 100%;
-            font-size: 0.85rem !important;
-            letter-spacing: 1px;
+            font-size: 0.8rem !important;
+            letter-spacing: 1.5px !important;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
-        .stButton>button:hover { background-color: #E0112A !important; }
+        .stButton>button:hover {
+            background: linear-gradient(135deg, #E6C552 / 100%, #D4AF37 100%) !important;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
 
-        p, span, div, label { color: #A0A0A0; font-size: 1rem; line-height: 1.6; }
+        p, span, div, label { color: #94A3B8; font-size: 1.02rem; line-height: 1.6; }
         h1, h2, h3 { color: #FFFFFF; }
     </style>
 """, unsafe_allow_html=True)
@@ -122,15 +128,14 @@ if "community_reports" not in st.session_state:
 df = st.session_state.road_data
 df["color"] = df["Health_Score"].apply(lambda x: [10, 185, 129, 220] if x >= 75 else ([245, 158, 11, 220] if x >= 40 else [239, 68, 68, 220]))
 
-# --- TOP HEADER & LAPTOP-FRIENDLY HORIZONTAL CLICK NAVBAR ---
+# --- TOP HEADER & LAPTOP-FRIENDLY GOLD NAVBAR ---
 st.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1A1A1A; padding-bottom: 15px; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 15px; margin-bottom: 25px;">
         <div class="brand-title">ROADX<span>.AI</span></div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #FF1E38; letter-spacing: 2px;">SECURE HUD // DESKTOP MODE</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #D4AF37; letter-spacing: 2px;">SECURE ENTERPRISE HUD</div>
     </div>
 """, unsafe_allow_html=True)
 
-# 9-column horizontal layout so all navigation buttons sit nicely side-by-side on laptops
 nav_cols = st.columns(9)
 pages = ["Overview", "Command", "Vision Lab", "Acoustic", "Smart-Cure", "Carbon", "Citizen", "Cost", "Finance"]
 page_icons = ["🏠 Overview", "🏛️ Command", "👁️ Vision", "🔊 Acoustic", "⚡ Smart-Cure", "🌱 Carbon", "📢 Citizen", "💰 Cost", "📊 Finance"]
@@ -141,42 +146,42 @@ for i, col in enumerate(nav_cols):
             st.session_state.current_page = pages[i]
             st.rerun()
 
-st.markdown("<div style='margin-bottom: 20px; border-bottom: 1px solid #1A1A1A;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05);'></div>", unsafe_allow_html=True)
 
 page = st.session_state.current_page
 
-# ================= PAGE ROUTING (OPTIMIZED FOR WIDE LAPTOP GRIDS) =================
+# ================= PAGE ROUTING =================
 if page == "Overview":
     st.markdown("""
         <div style="text-align: center; padding: 20px 0 40px 0;">
-            <h1 style="font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 700; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
-                BUILD BEYOND <span style="color: #FF1E38;">BOUNDARIES.</span>
+            <h1 style="font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
+                AUTONOMOUS <span style="color: #D4AF37;">INFRASTRUCTURE.</span>
             </h1>
-            <p style="font-size: 1.15rem; max-width: 700px; margin: 0 auto;">Autonomous sub-surface infrastructure monitoring deployed for Trivandrum municipal smart corridors.</p>
+            <p style="font-size: 1.15rem; max-width: 700px; margin: 0 auto; color: #94A3B8;">Sub-surface telemetry, YOLOv8 vision intelligence, and predictive municipal risk management.</p>
         </div>
     """, unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FF1E38; font-family:\'JetBrains Mono\'; font-size: 2.2rem;">12.4 km</h2><p>Pilot Corridor Scanned</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.2rem;">12.4 km</h2><p>Pilot Corridor Scanned</p></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'JetBrains Mono\'; font-size: 2.2rem;">99.4%</h2><p>YOLOv8 Accuracy</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.2rem;">99.4%</h2><p>YOLOv8 Accuracy</p></div>', unsafe_allow_html=True)
     with c3:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FF1E38; font-family:\'JetBrains Mono\'; font-size: 2.2rem;">142 t</h2><p>Carbon Credits Minted</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.2rem;">142 t</h2><p>Carbon Credits Minted</p></div>', unsafe_allow_html=True)
 
     st.markdown('<div class="section-heading">System Core Verticals</div>', unsafe_allow_html=True)
     v1, v2 = st.columns(2)
     with v1:
         st.markdown("""
             <div class="sleek-card">
-                <h3 style="color: #FFF; font-family: 'JetBrains Mono', monospace; margin-bottom: 10px;">01 // HARDWARE</h3>
+                <h3 style="color: #FFF; font-family: 'Cinzel', serif; margin-bottom: 10px;">01 // HARDWARE</h3>
                 <p>Sub-surface acoustic sensors tracking soil and structural erosion shifts in real time.</p>
             </div>
         """, unsafe_allow_html=True)
     with v2:
         st.markdown("""
             <div class="sleek-card">
-                <h3 style="color: #FFF; font-family: 'JetBrains Mono', monospace; margin-bottom: 10px;">02 // SOFTWARE</h3>
+                <h3 style="color: #FFF; font-family: 'Cinzel', serif; margin-bottom: 10px;">02 // SOFTWARE</h3>
                 <p>Real-time computer vision threat telemetry fed directly to city dispatch and emergency response units.</p>
             </div>
         """, unsafe_allow_html=True)
@@ -205,7 +210,7 @@ elif page == "Command":
         st.markdown(f"""
             <div style="margin-top: 10px;">
                 <b>Location:</b> {row['Location']}<br><br>
-                <b>Health Score:</b> <span style="color: #FF1E38; font-weight: 700;">{row['Health_Score']} / 100</span><br><br>
+                <b>Health Score:</b> <span style="color: #D4AF37; font-weight: 700;">{row['Health_Score']} / 100</span><br><br>
                 <b>Failure ETA:</b> {row['Predicted_Failure_Days']}<br><br>
                 <b>2-Wheeler Risk:</b> {row['Two_Wheeler_Risk']}
             </div>
@@ -220,7 +225,7 @@ elif page == "Vision Lab":
         if uploaded:
             st.image(uploaded, use_container_width=True)
     with col_v2:
-        st.markdown('<div class="sleeks-card">', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Tensor Inference Pipeline")
         st.markdown("<p>Upload a surface image to execute multi-class defect bounding box models via YOLOv8 architecture.</p>", unsafe_allow_html=True)
         if uploaded and st.button("RUN YOLOv8 INFERENCE"):
@@ -249,7 +254,7 @@ elif page == "Carbon":
     st.markdown('<div class="section-heading">Carbon Credit Ledger</div>', unsafe_allow_html=True)
     c_col1, c_col2 = st.columns(2)
     with c_col1:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FF1E38; font-family:\'JetBrains Mono\';">142.5 tCO2e</h2><p>Avoided hot-mix bitumen emissions verified.</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\';">142.5 tCO2e</h2><p>Avoided hot-mix bitumen emissions verified.</p></div>', unsafe_allow_html=True)
     with c_col2:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         if st.button("MINT VERIFIED CREDITS"):
@@ -267,38 +272,38 @@ elif page == "Citizen":
     with cit_2:
         st.markdown("### Active Community Reports")
         for r in st.session_state.community_reports:
-            st.markdown(f"""<div class="sleek-card"><b>{r['location']}</b><br><span style="color:#FF1E38;">{r['type']}</span></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div class="sleek-card"><b>{r['location']}</b><br><span style="color:#D4AF37;">{r['type']}</span></div>""", unsafe_allow_html=True)
 
 elif page == "Cost":
     st.markdown('<div class="section-heading">Severity & Cost Estimator</div>', unsafe_allow_html=True)
     w = st.slider("Width (cm)", 10, 200, 50)
     d = st.slider("Depth (cm)", 2, 50, 10)
     cost = (w * w * d / 1000) * 2.75 + 150
-    st.markdown(f'<div class="sleek-card"><h2 style="color:#FF1E38;">₹{cost:.2f}</h2><p>Estimated Repair Budget</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37;">₹{cost:.2f}</h2><p>Estimated Repair Budget</p></div>', unsafe_allow_html=True)
 
 elif page == "Finance":
     st.markdown('<div class="section-heading">Financial Economics</div>', unsafe_allow_html=True)
     f_c1, f_c2 = st.columns(2)
     with f_c1:
         st.markdown("""
-            <div class="sleek-card" style="border-color: #FF1E38;">
-                <h3 style="color:#FF1E38;">Traditional Reactive</h3>
-                <h2 style="color:#FF1E38; font-family:'JetBrains Mono';">₹4.5 Cr / yr</h2>
+            <div class="sleek-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                <h3 style="color:#EF4444;">Traditional Reactive</h3>
+                <h2 style="color:#EF4444; font-family:'Cinzel';">₹4.5 Cr / yr</h2>
                 <p>High costs from late-stage full road reconstruction.</p>
             </div>
         """, unsafe_allow_html=True)
     with f_c2:
         st.markdown("""
-            <div class="sleek-card">
-                <h3 style="color:#FFF;">RoadX Preventative</h3>
-                <h2 style="color:#FFF; font-family:'JetBrains Mono';">₹1.8 Cr / yr</h2>
+            <div class="sleek-card" style="border-color: rgba(212, 175, 55, 0.4);">
+                <h3 style="color:#D4AF37;">RoadX Preventative</h3>
+                <h2 style="color:#D4AF37; font-family:'Cinzel';">₹1.8 Cr / yr</h2>
                 <p>Targeted micro-interventions saving over 60% annually.</p>
             </div>
         """, unsafe_allow_html=True)
 
 # --- FOOTER ---
 st.markdown("""
-    <div style="border-top: 1px solid #1A1A1A; margin-top: 60px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #444;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
+    <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 60px; padding-top: 30px; text-align: center;">
+        <div style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #D4AF37; letter-spacing: 2px;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
     </div>
 """, unsafe_allow_html=True)
