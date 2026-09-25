@@ -10,7 +10,7 @@ os.environ["MAPBOX_API_KEY"] = MAPBOX_TOKEN
 pdk.settings.mapbox_api_key = MAPBOX_TOKEN
 
 st.set_page_config(
-    page_title="ROADX AI | Enterprise Platform",
+    page_title="Roadguard AI | Enterprise Platform",
     page_icon="⚜️",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -134,7 +134,7 @@ df["color"] = df["Health_Score"].apply(lambda x: [10, 185, 129, 220] if x >= 75 
 # --- TOP HEADER & HIGH-CONTRAST NAVBAR ---
 st.markdown("""
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.25); padding-bottom: 15px; margin-bottom: 25px;">
-        <div class="brand-title">ROADX<span>.AI</span></div>
+        <div class="brand-title">ROADGUARD<span>.AI</span></div>
         <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #D4AF37; letter-spacing: 2px;">SECURE ENTERPRISE HUD</div>
     </div>
 """, unsafe_allow_html=True)
@@ -145,7 +145,6 @@ page_labels = ["Overview", "Command", "Vision", "Acoustic", "Smart-Cure", "Carbo
 
 for i, col in enumerate(nav_cols):
     with col:
-        # Highlight active page button dynamically
         if st.session_state.current_page == pages[i]:
             if st.button(f"✨ {page_labels[i]}"):
                 st.session_state.current_page = pages[i]
@@ -304,7 +303,7 @@ elif page == "Finance":
     with f_c2:
         st.markdown("""
             <div class="sleek-card" style="border-color: rgba(212, 175, 55, 0.4);">
-                <h3 style="color:#D4AF37;">RoadX Preventative</h3>
+                <h3 style="color:#D4AF37;">Roadguard Preventative</h3>
                 <h2 style="color:#D4AF37; font-family:'Cinzel';">₹1.8 Cr / yr</h2>
                 <p>Targeted micro-interventions saving over 60% annually.</p>
             </div>
@@ -313,6 +312,6 @@ elif page == "Finance":
 # --- FOOTER ---
 st.markdown("""
     <div style="border-top: 1px solid rgba(212,175,55,0.25); margin-top: 60px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #D4AF37; letter-spacing: 2px;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
+        <div style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #D4AF37; letter-spacing: 2px;">ROADGUARD.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
     </div>
 """, unsafe_allow_html=True)
