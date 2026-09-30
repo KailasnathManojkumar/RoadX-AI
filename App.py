@@ -74,29 +74,27 @@ st.markdown("""
             border-radius: 16px;
             padding: 28px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
         .stButton>button {
-            background: linear-gradient(135deg, #1A1A22 0%, #111116 100%) !important;
-            color: #FFFFFF !important;
+            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
+            color: #030305 !important;
             font-family: 'Cinzel', serif !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
             border-radius: 10px !important;
-            border: 1px solid rgba(212, 175, 55, 0.4) !important;
+            border: 1px solid #D4AF37 !important;
             padding: 0.75rem 1rem !important;
             width: 100%;
-            font-size: 0.85rem !important;
+            font-size: 0.9rem !important;
             letter-spacing: 1.5px !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
+            cursor: pointer !important;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
         }
         .stButton>button:hover {
-            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
-            color: #030305 !important;
-            border-color: #D4AF37 !important;
+            background: linear-gradient(135deg, #FFF 0%, #D4AF37 100%) !important;
+            border-color: #FFF !important;
         }
 
         p, span, div, label { color: #94A3B8; font-size: 1.02rem; line-height: 1.6; }
@@ -168,42 +166,27 @@ if st.session_state.user_role == "Select Role":
     col_l1, col_l2, col_l3 = st.columns(3)
     
     with col_l1:
-        st.markdown("""
-            <div class="sleek-card" style="text-align: center; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🛡️</div>
-                    <h3 style="color: #FFF; font-family: 'Cinzel'; margin-bottom: 10px;">Citizen Portal</h3>
-                    <p style="font-size: 0.95rem;">Track local repairs, view civic updates, and report road hazards directly to municipal workers.</p>
-                </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
+        st.markdown("### 🛡️ Citizen Portal")
+        st.markdown("<p style='font-size: 0.95rem;'>Track local repairs, view civic updates, and report road hazards.</p>", unsafe_allow_html=True)
         if st.button("ENTER AS CITIZEN"):
             st.session_state.user_role = "Citizen / Public User"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col_l2:
-        st.markdown("""
-            <div class="sleek-card" style="text-align: center; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">⚡</div>
-                    <h3 style="color: #FFF; font-family: 'Cinzel'; margin-bottom: 10px;">Field Contractor</h3>
-                    <p style="font-size: 0.95rem;">Access task assignments, run neural vision inference, and calculate precise repair budgets.</p>
-                </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
+        st.markdown("### ⚡ Field Contractor")
+        st.markdown("<p style='font-size: 0.95rem;'>Access task assignments, run neural vision inference, and calculate budgets.</p>", unsafe_allow_html=True)
         if st.button("ENTER AS CONTRACTOR"):
             st.session_state.user_role = "Field Contractor"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col_l3:
-        st.markdown("""
-            <div class="sleek-card" style="text-align: center; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🔒</div>
-                    <h3 style="color: #D4AF37; font-family: 'Cinzel'; margin-bottom: 10px;">Admin / Planner</h3>
-                    <p style="font-size: 0.95rem;">Secured access required. Full command grid telemetry, carbon credit minting, and municipal economics.</p>
-                </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
+        st.markdown("### 🔒 Admin / Planner")
+        st.markdown("<p style='font-size: 0.95rem;'>Command grid telemetry, carbon credit minting, and municipal economics.</p>", unsafe_allow_html=True)
         if st.button("ENTER AS ADMIN"):
             st.session_state.user_role = "Admin / City Planner"
             st.rerun()
@@ -435,18 +418,15 @@ elif page == "Carbon Ledger":
     c_col1, c_col2 = st.columns(2)
     with c_col1:
         st.markdown(f"""
-            <div class="sleek-card">
-                <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem;">{st.session_state.carbon_credits:.1f} tCO2e</h2>
-                <p style="margin-top:10px;">Avoided hot-mix bitumen emissions verified.</p>
+            <div class="sleek-card" style="height: 180px; display: flex; flex-direction: column; justify-content: center;">
+                <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem; margin-bottom: 5px;">{st.session_state.carbon_credits:.1f} tCO2e</h2>
+                <p style="margin: 0;">Avoided hot-mix bitumen emissions verified.</p>
             </div>
         """, unsafe_allow_html=True)
     with c_col2:
-        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card" style="height: 180px; display: flex; flex-direction: column; justify-content: center;">', unsafe_allow_html=True)
         st.markdown("### Ledger Minting")
-        mint_clicked = st.button("MINT VERIFIED CREDITS")
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        if mint_clicked:
+        if st.button("MINT VERIFIED CREDITS"):
             st.session_state.carbon_credits += 15.0
             st.session_state.financial_ledger.append({
                 "Record": "Minted 15.0 tCO2e Carbon Offsets", 
@@ -455,6 +435,7 @@ elif page == "Carbon Ledger":
             })
             st.success("Successfully minted 15.0 cryptographic carbon credits & logged revenue to finance ledger!")
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == "Finance":
     st.markdown('<div class="section-heading">Financial Economics & Ledger</div>', unsafe_allow_html=True)
