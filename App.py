@@ -110,6 +110,9 @@ if "user_role" not in st.session_state:
 if "admin_authenticated" not in st.session_state:
     st.session_state.admin_authenticated = False
 
+if "carbon_credits" not in st.session_state:
+    st.session_state.carbon_credits = 142.5
+
 if "road_data" not in st.session_state:
     st.session_state.road_data = pd.DataFrame({
         "Road_ID": ["TVM-01", "TVM-02", "TVM-03", "TVM-04", "TVM-05"],
@@ -395,7 +398,7 @@ elif page == "Overview":
     with c2:
         st.markdown(f'<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">{len(st.session_state.vision_database)}</h2><p style="margin-top:5px;">Active Defect Tickets</p></div>', unsafe_allow_html=True)
     with c3:
-        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">142 t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{st.session_state.carbon_credits:.1f} t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
 
 elif page == "Command Center":
     st.markdown('<div class="section-heading">Municipal Command Grid</div>', unsafe_allow_html=True)
@@ -430,12 +433,24 @@ elif page == "Carbon Ledger":
     st.markdown('<div class="section-heading">Carbon Credit Ledger</div>', unsafe_allow_html=True)
     c_col1, c_col2 = st.columns(2)
     with c_col1:
-        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size:2.5rem;">142.5 tCO2e</h2><p style="margin-top:10px;">Avoided hot-mix bitumen emissions verified.</p></div>', unsafe_allow_html=True)
+        st.markdown(f"""
+            <div class="sleek-card">
+                <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem;">{st.session_state.carbon_credits:.1f} tCO2e</h2>
+                <p style="margin-top:10px;">Avoided hot-mix bitumen emissions verified.</p>
+            </div>
+        """, unsafe_allow_html=True)
     with c_col2:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Ledger Minting")
         if st.button("MINT VERIFIED CREDITS"):
-            st.success("Successfully minted cryptographic proof on municipal ledger.")
+            st.session_state.carbon_credits += 15.0
+            st.session_state.financial_ledger.append({
+                "Record": "Minted 15.0 tCO2e Carbon Offsets", 
+                "Amount": f"+₹{(15.0 * 8500):,.2f}", 
+                "Type": "Revenue"
+            })
+            st.success("Successfully minted 15.0 cryptographic carbon credits & logged revenue to finance ledger!")
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == "Finance":
