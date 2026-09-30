@@ -75,6 +75,7 @@ st.markdown("""
             padding: 28px;
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            height: 100%;
         }
 
         .stButton>button {
@@ -87,7 +88,7 @@ st.markdown("""
             border: 1px solid #D4AF37 !important;
             padding: 0.75rem 1rem !important;
             width: 100%;
-            font-size: 0.9rem !important;
+            font-size: 0.85rem !important;
             letter-spacing: 1.5px !important;
             cursor: pointer !important;
             box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
@@ -114,8 +115,8 @@ if "carbon_credits" not in st.session_state:
 
 if "road_data" not in st.session_state:
     st.session_state.road_data = pd.DataFrame({
-        "Road_ID": ["TVM-01", "TVM-02", "TVM-03", "TVM-04", "TVM-05"],
-        "Location": ["MC Road, Ulloor", "NH-66 Bypass", "Kowdiar Square", "Pattom Corridor", "East Fort Ring"],
+        "Road_ID": ["SEC-01", "SEC-02", "SEC-03", "SEC-04", "SEC-05"],
+        "Location": ["Primary Corridor A", "Highway Bypass Loop", "Central Plaza Square", "North Sectorway", "Ring Route East"],
         "Latitude": [8.5331, 8.5645, 8.5175, 8.5208, 8.4842],
         "Longitude": [76.9317, 76.8782, 76.9551, 76.9382, 76.9472],
         "Health_Score": [88, 42, 94, 28, 65],
@@ -126,20 +127,20 @@ if "road_data" not in st.session_state:
 
 if "vision_database" not in st.session_state:
     st.session_state.vision_database = [
-        {"ticket_id": "TICK-801", "location": "MC Road Corridor, Sector 4", "defect": "Critical Pothole", "confidence": "98.4%", "status": "Dispatched"},
-        {"ticket_id": "TICK-802", "location": "NH-66 Bypass Junction", "defect": "Surface Fracture", "confidence": "91.2%", "status": "Pending"}
+        {"ticket_id": "TICK-801", "location": "Primary Corridor A, Sector 4", "defect": "Critical Pothole", "confidence": "98.4%", "status": "Dispatched"},
+        {"ticket_id": "TICK-802", "location": "Highway Bypass Junction", "defect": "Surface Fracture", "confidence": "91.2%", "status": "Pending"}
     ]
 
 if "community_reports" not in st.session_state:
     st.session_state.community_reports = [
-        {"id": 1, "location": "Ulloor Junction", "type": "Pothole / Edge Break", "status": "Active"},
-        {"id": 2, "location": "Kazhakkoottam Rd", "type": "Surface Fracture", "status": "Active"}
+        {"id": 1, "location": "Sector Junction 1", "type": "Pothole / Edge Break", "status": "Active"},
+        {"id": 2, "location": "Suburban Route West", "type": "Surface Fracture", "status": "Active"}
     ]
 
 if "completed_fixes" not in st.session_state:
     st.session_state.completed_fixes = [
-        {"id": "FIX-101", "location": "Vellayambalam Square", "repair_type": "Polymer Resin Injection", "date_resolved": "Yesterday", "status": "Completed & Verified"},
-        {"id": "FIX-102", "location": "Pattom Main Road", "repair_type": "Smart-Cure Thermal Patch", "date_resolved": "3 days ago", "status": "Completed & Verified"}
+        {"id": "FIX-101", "location": "Central Plaza Square", "repair_type": "Polymer Resin Injection", "date_resolved": "Yesterday", "status": "Completed & Verified"},
+        {"id": "FIX-102", "location": "Main Corridor North", "repair_type": "Smart-Cure Thermal Patch", "date_resolved": "3 days ago", "status": "Completed & Verified"}
     ]
 
 if "financial_ledger" not in st.session_state:
@@ -154,11 +155,11 @@ df["color"] = df["Health_Score"].apply(lambda x: [10, 185, 129, 220] if x >= 75 
 # ================= LANDING SCREEN =================
 if st.session_state.user_role == "Select Role":
     st.markdown("""
-        <div style="text-align: center; padding: 40px 0 20px 0;">
+        <div style="text-align: center; padding: 30px 0 10px 0;">
             <div class="brand-title" style="font-size: 2.8rem;">ROADX<span>.AI</span></div>
-            <div style="font-family: 'JetBrains Mono'; font-size: 0.9rem; color: #D4AF37; letter-spacing: 4px; margin-top: 5px;">AUTONOMOUS MUNICIPAL ROAD PLATFORM</div>
-            <p style="max-width: 650px; margin: 20px auto 40px auto; font-size: 1.15rem; color: #94A3B8;">
-                Select your portal entry point below to access specialized telemetry, field execution modules, or citizen reporting tools.
+            <div style="font-family: 'JetBrains Mono'; font-size: 0.9rem; color: #D4AF37; letter-spacing: 4px; margin-top: 5px;">AUTONOMOUS ROAD ASSET PLATFORM</div>
+            <p style="max-width: 650px; margin: 15px auto 30px auto; font-size: 1.1rem; color: #94A3B8;">
+                Select your portal entry point below to access specialized telemetry, field execution modules, or public reporting tools.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -166,28 +167,31 @@ if st.session_state.user_role == "Select Role":
     col_l1, col_l2, col_l3 = st.columns(3)
     
     with col_l1:
-        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
-        st.markdown("### 🛡️ Citizen Portal")
-        st.markdown("<p style='font-size: 0.95rem;'>Track local repairs, view civic updates, and report road hazards.</p>", unsafe_allow_html=True)
-        if st.button("ENTER AS CITIZEN"):
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 2.2rem; margin-bottom: 8px; text-align: center;'>🛡️</div>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-family: Cinzel; margin-bottom: 8px;'>Public Portal</h3>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size: 0.9rem; text-align: center; min-height: 50px;'>Track local repairs, view community updates, and report road hazards.</p>", unsafe_allow_html=True)
+        if st.button("ENTER AS PUBLIC", key="btn_citizen"):
             st.session_state.user_role = "Citizen / Public User"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col_l2:
-        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
-        st.markdown("### ⚡ Field Contractor")
-        st.markdown("<p style='font-size: 0.95rem;'>Access task assignments, run neural vision inference, and calculate budgets.</p>", unsafe_allow_html=True)
-        if st.button("ENTER AS CONTRACTOR"):
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 2.2rem; margin-bottom: 8px; text-align: center;'>⚡</div>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-family: Cinzel; margin-bottom: 8px;'>Field Contractor</h3>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size: 0.9rem; text-align: center; min-height: 50px;'>Access task assignments, run neural vision inference, and calculate budgets.</p>", unsafe_allow_html=True)
+        if st.button("ENTER AS CONTRACTOR", key="btn_contractor"):
             st.session_state.user_role = "Field Contractor"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col_l3:
-        st.markdown('<div class="sleek-card" style="text-align: center; min-height: 280px;">', unsafe_allow_html=True)
-        st.markdown("### 🔒 Admin / Planner")
-        st.markdown("<p style='font-size: 0.95rem;'>Command grid telemetry, carbon credit minting, and municipal economics.</p>", unsafe_allow_html=True)
-        if st.button("ENTER AS ADMIN"):
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 2.2rem; margin-bottom: 8px; text-align: center;'>🔒</div>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-family: Cinzel; margin-bottom: 8px; color: #D4AF37;'>Admin / Planner</h3>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size: 0.9rem; text-align: center; min-height: 50px;'>Command grid telemetry, carbon credit minting, and network economics.</p>", unsafe_allow_html=True)
+        if st.button("ENTER AS ADMIN", key="btn_admin"):
             st.session_state.user_role = "Admin / City Planner"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -220,7 +224,7 @@ with st.sidebar:
         elif admin_pass != "":
             st.error("❌ Invalid Password")
 
-    if st.button("← SWITCH ROLE"):
+    if st.button("← SWITCH ROLE", key="switch_role"):
         st.session_state.user_role = "Select Role"
         st.session_state.admin_authenticated = False
         st.rerun()
@@ -228,7 +232,7 @@ with st.sidebar:
     st.markdown("<hr style='border-color: rgba(212,175,55,0.15); margin: 20px 0;'>", unsafe_allow_html=True)
     
     if st.session_state.user_role == "Citizen / Public User":
-        pages = ["Public Home", "Report Hazard", "Civic Updates & Fixes"]
+        pages = ["Public Home", "Report Hazard", "Community Updates & Fixes"]
     elif st.session_state.user_role == "Field Contractor":
         pages = ["Field Operations Hub", "Vision Lab", "Cost Estimator"]
     elif st.session_state.user_role == "Admin / City Planner":
@@ -242,7 +246,7 @@ if page == "Admin Locked":
         <div style="padding: 60px 20px; text-align: center;">
             <h1 style="font-family: 'Cinzel', serif; font-size: 2.5rem; color: #EF4444; margin-bottom: 20px;">ADMIN AUTHENTICATION REQUIRED</h1>
             <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; color: #94A3B8;">
-                Please enter the secure administrative password in the sidebar input field to unlock municipal control systems.
+                Please enter the secure administrative password in the sidebar input field to unlock control systems.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -252,19 +256,19 @@ elif page == "Public Home":
     st.markdown("""
         <div style="padding: 30px 0 40px 0;">
             <h1 style="font-family: 'Cinzel', serif; font-size: 3.2rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
-                TRIVANDRUM <span style="color: #D4AF37;">CIVIC PORTAL.</span>
+                ENTERPRISE <span style="color: #D4AF37;">CIVIC PORTAL.</span>
             </h1>
-            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">Welcome citizen! Track municipal road improvements, check verified repairs in your neighborhood, and report potholes directly to city crews.</p>
+            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">Welcome! Track road network improvements, check verified repairs in your area, and report potholes directly to maintenance crews.</p>
         </div>
     """, unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
         st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{45 + len(st.session_state.community_reports)}</h2><p style="margin-top:5px;">Potholes Fixed & Tracked This Month</p></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">98.2%</h2><p style="margin-top:5px;">Citizen Report Resolution Rate</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">98.2%</h2><p style="margin-top:5px;">Report Resolution Rate</p></div>', unsafe_allow_html=True)
 
 elif page == "Report Hazard":
-    st.markdown('<div class="section-heading">Citizen Pothole & Hazard Reporting</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Public Pothole & Hazard Reporting</div>', unsafe_allow_html=True)
     c_rep1, c_rep2 = st.columns(2)
     with c_rep1:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
@@ -273,19 +277,19 @@ elif page == "Report Hazard":
             street = st.text_input("Street Name / Landmark")
             issue_type = st.selectbox("Issue Type", ["Pothole / Crater", "Surface Fracture", "Broken Edge / Curb", "Water Logging"])
             if st.form_submit_button("SUBMIT REPORT") and street:
-                st.success("Report successfully transmitted to municipal operations!")
+                st.success("Report successfully transmitted to operations dispatch!")
                 st.session_state.community_reports.insert(0, {"id": len(st.session_state.community_reports)+1, "location": street, "type": issue_type, "status": "Active"})
-                st.session_state.vision_database.insert(0, {"ticket_id": f"TICK-{random.randint(850, 999)}", "location": street, "defect": issue_type, "confidence": "Verified Citizen Report", "status": "Pending"})
+                st.session_state.vision_database.insert(0, {"ticket_id": f"TICK-{random.randint(850, 999)}", "location": street, "defect": issue_type, "confidence": "Verified Public Report", "status": "Pending"})
         st.markdown('</div>', unsafe_allow_html=True)
     with c_rep2:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
-        st.markdown("### Active Neighborhood Reports")
+        st.markdown("### Active Community Reports")
         for r in st.session_state.community_reports:
             st.markdown(f"""<div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #D4AF37;"><b>{r['location']}</b><br><span style="color:#D4AF37; font-size:0.9rem;">{r['type']}</span></div>""", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-elif page == "Civic Updates & Fixes":
-    st.markdown('<div class="section-heading">Public Civic Updates & Recent Fixes</div>', unsafe_allow_html=True)
+elif page == "Community Updates & Fixes":
+    st.markdown('<div class="section-heading">Public Updates & Recent Fixes</div>', unsafe_allow_html=True)
     col_f1, col_f2 = st.columns(2)
     with col_f1:
         st.markdown("### ✅ Recently Fixed & Verified")
@@ -298,11 +302,11 @@ elif page == "Civic Updates & Fixes":
                 </div>
             """, unsafe_allow_html=True)
     with col_f2:
-        st.markdown("### 🚧 Upcoming Municipal Developments")
+        st.markdown("### 🚧 Upcoming Scheduled Developments")
         st.markdown("""
             <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 16px; margin-bottom: 15px;">
                 <div style="color: #D4AF37; font-family: 'JetBrains Mono'; font-size: 0.8rem;">SCHEDULED: NEXT WEEK</div>
-                <div style="font-weight: 700; color: #FFF; font-size: 1.1rem; margin: 4px 0;">MC Road Sector 2 Resurfacing</div>
+                <div style="font-weight: 700; color: #FFF; font-size: 1.1rem; margin: 4px 0;">Corridor Sector 2 Resurfacing</div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -312,7 +316,7 @@ elif page == "Field Operations Hub":
     st.markdown("""
         <div class="sleek-card">
             <h3>Active Task Assignments & Live Tickets</h3>
-            <p>Review assigned maintenance tickets generated from neural scans and citizen reports.</p>
+            <p>Review assigned maintenance tickets generated from neural scans and public reports.</p>
         </div>
     """, unsafe_allow_html=True)
     st.dataframe(pd.DataFrame(st.session_state.vision_database), use_container_width=True, hide_index=True)
@@ -324,7 +328,7 @@ elif page == "Vision Lab":
     with col_v1:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Upload Pavement Image", type=["jpg", "png", "jpeg"])
-        input_location = st.text_input("Exact Incident Location / Street", value="Pattom Junction, Sector 2")
+        input_location = st.text_input("Exact Incident Location / Street", value="Sector Junction 2")
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
             st.image(image, caption="Uploaded Pavement Frame", use_container_width=True)
@@ -333,7 +337,7 @@ elif page == "Vision Lab":
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Tensor Inference Pipeline")
         if uploaded_file is not None:
-            if st.button("RUN YOLOv8 INFERENCE & LOG"):
+            if st.button("RUN YOLOv8 INFERENCE & LOG", key="run_inference"):
                 with st.spinner("Processing tensor weights..."):
                     import time
                     time.sleep(1.0)
@@ -361,7 +365,7 @@ elif page == "Cost Estimator":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("SAVE ESTIMATE TO MUNICIPAL BUDGET"):
+    if st.button("SAVE ESTIMATE TO BUDGET", key="save_estimate"):
         st.session_state.financial_ledger.append({"Record": f"Field Repair Estimate ({w}x{d}cm)", "Amount": f"₹{cost:.2f}", "Type": "Expenditure"})
         st.success("Estimate successfully committed to financial ledger!")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -373,7 +377,7 @@ elif page == "Overview":
             <h1 style="font-family: 'Cinzel', serif; font-size: 3.2rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
                 ADMINISTRATIVE <span style="color: #D4AF37;">OVERVIEW.</span>
             </h1>
-            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">High-level municipal asset health, macro telemetry, and budgetary oversight.</p>
+            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">High-level asset health, macro telemetry, and budgetary oversight.</p>
         </div>
     """, unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
@@ -385,7 +389,7 @@ elif page == "Overview":
         st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{st.session_state.carbon_credits:.1f} t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
 
 elif page == "Command Center":
-    st.markdown('<div class="section-heading">Municipal Command Grid</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Command Grid</div>', unsafe_allow_html=True)
     col_map, col_ctrl = st.columns([2, 1])
     with col_map:
         layer = pdk.Layer(
@@ -418,15 +422,15 @@ elif page == "Carbon Ledger":
     c_col1, c_col2 = st.columns(2)
     with c_col1:
         st.markdown(f"""
-            <div class="sleek-card" style="height: 180px; display: flex; flex-direction: column; justify-content: center;">
+            <div class="sleek-card" style="display: flex; flex-direction: column; justify-content: center;">
                 <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem; margin-bottom: 5px;">{st.session_state.carbon_credits:.1f} tCO2e</h2>
                 <p style="margin: 0;">Avoided hot-mix bitumen emissions verified.</p>
             </div>
         """, unsafe_allow_html=True)
     with c_col2:
-        st.markdown('<div class="sleek-card" style="height: 180px; display: flex; flex-direction: column; justify-content: center;">', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card" style="display: flex; flex-direction: column; justify-content: center;">', unsafe_allow_html=True)
         st.markdown("### Ledger Minting")
-        if st.button("MINT VERIFIED CREDITS"):
+        if st.button("MINT VERIFIED CREDITS", key="mint_credits"):
             st.session_state.carbon_credits += 15.0
             st.session_state.financial_ledger.append({
                 "Record": "Minted 15.0 tCO2e Carbon Offsets", 
@@ -444,6 +448,6 @@ elif page == "Finance":
 # --- FOOTER ---
 st.markdown("""
     <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 80px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
+        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // ENTERPRISE INFRASTRUCTURE PLATFORM</div>
     </div>
 """, unsafe_allow_html=True)
