@@ -128,8 +128,8 @@ if "road_data" not in st.session_state:
 
 if "vision_database" not in st.session_state:
     st.session_state.vision_database = [
-        {"ticket_id": "TICK-801", "location": "MC Road Corridor", "defect": "Critical Pothole", "confidence": "98.4%", "status": "Dispatched"},
-        {"ticket_id": "TICK-802", "location": "NH-66 Bypass", "defect": "Surface Fracture", "confidence": "91.2%", "status": "Pending Verification"}
+        {"ticket_id": "TICK-801", "location": "MC Road Corridor, Sector 4", "defect": "Critical Pothole", "confidence": "98.4%", "status": "Dispatched"},
+        {"ticket_id": "TICK-802", "location": "NH-66 Bypass Junction", "defect": "Surface Fracture", "confidence": "91.2%", "status": "Pending"}
     ]
 
 if "community_reports" not in st.session_state:
@@ -219,6 +219,10 @@ elif page == "Vision Lab":
     with col_v1:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Upload Pavement Image", type=["jpg", "png", "jpeg"])
+        
+        # FIXED: Require the user to explicitly define where this photo was taken
+        input_location = st.text_input("Exact Incident Location / Street", value="Pattom Junction, Sector 2")
+        
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
             st.image(image, caption="Uploaded Pavement Frame", use_container_width=True)
@@ -227,7 +231,7 @@ elif page == "Vision Lab":
     with col_v2:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Tensor Inference Pipeline")
-        st.markdown("<p style='margin-bottom: 20px;'>Runs computer vision models to isolate surface degradation and instantly log tickets to the municipal database.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='margin-bottom: 20px;'>Runs tensor models and binds the bounding box data to your specified location metadata.</p>", unsafe_allow_html=True)
         
         if uploaded_file is not None:
             if st.button("RUN YOLOv8 INFERENCE & LOG"):
@@ -246,18 +250,18 @@ elif page == "Vision Lab":
                     st.success("Inference complete! Ticket logged.")
                     st.image(img_annotated, caption="YOLOv8 Bounding Box Output", use_container_width=True)
                     
-                    # Add to database table state
+                    # FIXED: Uses the exact location entered by the user above instead of random data
                     new_ticket = {
                         "ticket_id": f"TICK-{random.randint(803, 999)}",
-                        "location": "Ulloor Junction Sector",
+                        "location": input_location,
                         "defect": "Critical Pothole",
                         "confidence": "98.4%",
                         "status": "Pending"
                     }
                     st.session_state.vision_database.insert(0, new_ticket)
-                    st.error("🚨 Hazard logged to active database below!")
+                    st.error(f"🚨 Logged ticket for location: {input_location}")
         else:
-            st.info("Please upload an image on the left to begin.")
+            st.info("Please upload an image and provide a location on the left.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Database Table View Below
