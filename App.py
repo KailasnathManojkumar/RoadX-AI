@@ -91,6 +91,7 @@ st.markdown("""
             font-size: 0.85rem !important;
             letter-spacing: 1.5px !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
         }
         .stButton>button:hover {
             background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%) !important;
@@ -442,7 +443,10 @@ elif page == "Carbon Ledger":
     with c_col2:
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Ledger Minting")
-        if st.button("MINT VERIFIED CREDITS"):
+        mint_clicked = st.button("MINT VERIFIED CREDITS")
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        if mint_clicked:
             st.session_state.carbon_credits += 15.0
             st.session_state.financial_ledger.append({
                 "Record": "Minted 15.0 tCO2e Carbon Offsets", 
@@ -451,7 +455,6 @@ elif page == "Carbon Ledger":
             })
             st.success("Successfully minted 15.0 cryptographic carbon credits & logged revenue to finance ledger!")
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == "Finance":
     st.markdown('<div class="section-heading">Financial Economics & Ledger</div>', unsafe_allow_html=True)
