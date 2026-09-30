@@ -5,7 +5,6 @@ import pydeck as pdk
 import numpy as np
 from PIL import Image, ImageDraw
 import random
-import datetime
 
 # --- CONFIGURATION ---
 MAPBOX_TOKEN = "pk.eyJ1Ijoia2FpbGFzbmF0aDEyMyIsImEiOiJjbXU4Zm93YmEwdXdnMnlzMmdnbTQyNzNoIn0.0yYdaXOauUT-_A6VaeuMyg"
@@ -115,30 +114,51 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- SESSION STATE ---
-if "work_orders" not in st.session_state:
-    st.session_state.work_orders = [
-        {"id": "WO-9041", "lat": 8.5331, "lon": 76.9317, "location": "MC Road Corridor, Sector 4", "severity": "CRITICAL", "cost": "₹12,450", "status": "Dispatched to Contractor", "time": "10 mins ago"},
-        {"id": "WO-9042", "lat": 8.5645, "lon": 76.8782, "location": "NH-66 Bypass Junction", "severity": "MODERATE", "cost": "₹5,200", "status": "Pending Verification", "time": "1 hour ago"}
+if "road_data" not in st.session_state:
+    st.session_state.road_data = pd.DataFrame({
+        "Road_ID": ["TVM-01", "TVM-02", "TVM-03", "TVM-04", "TVM-05"],
+        "Location": ["MC Road, Ulloor", "NH-66 Bypass", "Kowdiar Square", "Pattom Corridor", "East Fort Ring"],
+        "Latitude": [8.5331, 8.5645, 8.5175, 8.5208, 8.4842],
+        "Longitude": [76.9317, 76.8782, 76.9551, 76.9382, 76.9472],
+        "Health_Score": [88, 42, 94, 28, 65],
+        "Status": ["Optimal", "Moderate Risk", "Optimal", "Critical Failure", "Moderate Risk"],
+        "Predicted_Failure_Days": ["90+ days", "30 days", "120+ days", "4 days (Critical)", "45 days"],
+        "Two_Wheeler_Risk": ["Low Risk", "High Risk", "Low Risk", "Critical High Risk", "Moderate Risk"],
+    })
+
+if "vision_database" not in st.session_state:
+    st.session_state.vision_database = [
+        {"ticket_id": "TICK-801", "location": "MC Road Corridor", "defect": "Critical Pothole", "confidence": "98.4%", "status": "Dispatched"},
+        {"ticket_id": "TICK-802", "location": "NH-66 Bypass", "defect": "Surface Fracture", "confidence": "91.2%", "status": "Pending Verification"}
     ]
+
+if "community_reports" not in st.session_state:
+    st.session_state.community_reports = [
+        {"id": 1, "location": "Ulloor Junction", "type": "Pothole / Edge Break", "status": "Active"},
+        {"id": 2, "location": "Kazhakkoottam Rd", "type": "Surface Fracture", "status": "Active"}
+    ]
+
+df = st.session_state.road_data
+df["color"] = df["Health_Score"].apply(lambda x: [10, 185, 129, 220] if x >= 75 else ([245, 158, 11, 220] if x >= 40 else [239, 68, 68, 220]))
 
 # --- SIDEBAR NAVIGATION ---
 with st.sidebar:
     st.markdown("""
         <div style="padding: 10px 0 20px 0;">
             <div class="brand-title">ROADX<span>.AI</span></div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #D4AF37; letter-spacing: 2px;">ENTERPRISE AUTO-DISPATCH</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #D4AF37; letter-spacing: 2px;">SECURE ENTERPRISE HUD</div>
         </div>
     """, unsafe_allow_html=True)
     
-    pages = ["Overview", "Fleet Stream Ingestion", "Auto-Dispatch Work Orders", "Command Center", "Finance"]
+    pages = ["Overview", "Command Center", "Vision Lab", "Acoustic Sonar", "Smart-Cure", "Carbon Ledger", "Citizen Hub", "Cost Estimator", "Finance"]
     page = st.radio("Navigation", pages, label_visibility="collapsed")
     
     st.markdown("<hr style='border-color: rgba(212,175,55,0.15); margin: 30px 0;'>", unsafe_allow_html=True)
     st.markdown("""
         <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 15px;">
             <div style="font-size: 0.75rem; color: #D4AF37; font-family: 'JetBrains Mono'; margin-bottom: 5px;">SYSTEM STATUS</div>
-            <div style="font-size: 0.9rem; color: #FFFFFF; font-weight: 600;">🟢 Fleet Feed Active</div>
-            <div style="font-size: 0.8rem; color: #94A3B8; margin-top: 5px;">Connected Vehicles: 42 Units</div>
+            <div style="font-size: 0.9rem; color: #FFFFFF; font-weight: 600;">🟢 Telemetry Active</div>
+            <div style="font-size: 0.8rem; color: #94A3B8; margin-top: 5px;">Trivandrum Municipal Grid v4.2</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -147,126 +167,191 @@ if page == "Overview":
     st.markdown("""
         <div style="padding: 30px 0 40px 0;">
             <h1 style="font-family: 'Cinzel', serif; font-size: 3.2rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
-                CLOSED-LOOP <span style="color: #D4AF37;">AUTO-DISPATCH.</span>
+                AUTONOMOUS <span style="color: #D4AF37;">INFRASTRUCTURE.</span>
             </h1>
-            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">Moving beyond static photo uploads. ROADX ingests live commercial fleet dashcam streams, calculates defect severity, and automatically pushes active work orders to ground contractors.</p>
+            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">Sub-surface telemetry, YOLOv8 real-time computer vision, and predictive municipal risk analytics built for next-gen urban networks.</p>
         </div>
     """, unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">42</h2><p style="margin-top:5px;">Active Fleet Vehicles</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">12.4 km</h2><p style="margin-top:5px;">Pilot Corridor Scanned</p></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">0 sec</h2><p style="margin-top:5px;">Manual Upload Delay</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">99.4%</h2><p style="margin-top:5px;">YOLOv8 Accuracy</p></div>', unsafe_allow_html=True)
     with c3:
-        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">₹14.2 Lakh</h2><p style="margin-top:5px;">SLA Penalties Avoided</p></div>', unsafe_allow_html=True)
-
-elif page == "Fleet Stream Ingestion":
-    st.markdown('<div class="section-heading">Automated Fleet Dashcam Ingestion</div>', unsafe_allow_html=True)
-    
-    col_f1, col_f2 = st.columns([1, 1])
-    with col_f1:
-        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
-        st.markdown("### Live Feed Simulator")
-        st.markdown("Simulating continuous video stream from commercial delivery fleet vehicle **FL-TRUCK-08** on NH-66 corridor.")
-        
-        uploaded_file = st.file_uploader("Test Custom Fleet Frame (Optional)", type=["jpg", "png", "jpeg"])
-        if uploaded_file is not None:
-            active_img = Image.open(uploaded_file)
-        else:
-            # Create a clean default sample frame if none uploaded
-            active_img = Image.new('RGB', (800, 500), color=(30, 30, 40))
-            d = ImageDraw.Draw(active_img)
-            d.rectangle([200, 150, 600, 350], outline="#666666", width=10)
-            d.text((220, 220), "LIVE DASHCAM FRAME [FL-TRUCK-08]", fill="#AAAAAA")
-            
-        st.image(active_img, caption="Incoming Telemetry Frame from Vehicle Camera", use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-    with col_f2:
-        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
-        st.markdown("### Automated AI Processing & Dispatch Engine")
-        st.markdown("When a vehicle passes a defect, edge AI instantly executes inference, logs geolocation coordinates, and triggers work orders.")
-        
-        if st.button("SIMULATE AUTOMATED FRAME DETECTION"):
-            with st.spinner("Extracting GPS metadata & running edge inference..."):
-                import time
-                time.sleep(1.2)
-                
-                # Annotate image
-                annotated = active_img.copy()
-                draw = ImageDraw.Draw(annotated)
-                w, h = annotated.size
-                draw.rectangle([w*0.3, h*0.3, w*0.7, h*0.7], outline="#EF4444", width=4)
-                draw.rectangle([w*0.3, h*0.3 - 25, w*0.3 + 260, h*0.3], fill="#EF4444")
-                draw.text((w*0.3 + 5, h*0.3 - 22), "CRITICAL POTHOLE 99.1%", fill="#FFFFFF")
-                
-                st.success("Edge Inference Successful!")
-                st.image(annotated, caption="Bounding Box & Telemetry Tagged", use_container_width=True)
-                
-                # Automatically create work order
-                new_wo = {
-                    "id": f"WO-{random.randint(9050,9999)}",
-                    "lat": 8.5208,
-                    "lon": 76.9382,
-                    "location": "Pattom Junction Corridor",
-                    "severity": "CRITICAL",
-                    "cost": f"₹{random.randint(8000, 18000):,}",
-                    "status": "Auto-Dispatched",
-                    "time": "Just now"
-                }
-                st.session_state.work_orders.insert(0, new_wo)
-                st.error("🚨 CLOSED-LOOP TRIGGER: Work order automatically generated and dispatched to municipal contractor mobile app!")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-
-elif page == "Auto-Dispatch Work Orders":
-    st.markdown('<div class="section-heading">Closed-Loop Work Order Dashboard</div>', unsafe_allow_html=True)
-    st.markdown("<p style='margin-bottom: 25px;'>This is what replaces manual human reporting. Every time the AI flags a critical defect from fleet feeds, a live work ticket is instantly created and sent to local road repair contractors.</p>", unsafe_allow_html=True)
-    
-    for wo in st.session_state.work_orders:
-        st.markdown(f"""
-            <div class="sleek-card" style="border-left: 4px solid #D4AF37;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h3 style="color: #D4AF37; margin: 0; font-family: 'JetBrains Mono';">{wo['id']}</h3>
-                    <span style="background: rgba(239, 68, 68, 0.15); color: #EF4444; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3);">{wo['severity']}</span>
-                </div>
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-top: 15px;">
-                    <div><b>Location:</b><br>{wo['location']}</div>
-                    <div><b>Estimated Repair Cost:</b><br><span style="color: #D4AF37; font-weight: 700;">{wo['cost']}</span></div>
-                    <div><b>Status:</b><br><span style="color: #10B981;">{wo['status']}</span></div>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">142 t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
 
 elif page == "Command Center":
-    st.markdown('<div class="section-heading">Active Fleet & Hazard Map</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Municipal Command Grid</div>', unsafe_allow_html=True)
+    col_map, col_ctrl = st.columns([2, 1])
+    with col_map:
+        layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=df,
+            get_position=["Longitude", "Latitude"],
+            get_fill_color="color",
+            get_radius=350,
+            pickable=True,
+        )
+        view_state = pdk.ViewState(latitude=8.5241, longitude=76.9366, zoom=12, pitch=30)
+        deck = pdk.Deck(layers=[layer], initial_view_state=view_state, map_style="mapbox://styles/mapbox/dark-v10")
+        st.pydeck_chart(deck, use_container_width=True)
+        
+    with col_ctrl:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("### Corridor Telemetry")
+        sel_id = st.selectbox("Select Asset Corridor", df["Road_ID"])
+        row = df[df["Road_ID"] == sel_id].iloc[0]
+        st.markdown(f"""
+            <div style="margin-top: 15px;">
+                <b>Location:</b> {row['Location']}<br><br>
+                <b>Health Score:</b> <span style="color: #D4AF37; font-weight: 700;">{row['Health_Score']} / 100</span><br><br>
+                <b>Failure ETA:</b> {row['Predicted_Failure_Days']}<br><br>
+                <b>2-Wheeler Risk:</b> {row['Two_Wheeler_Risk']}
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Vision Lab":
+    st.markdown('<div class="section-heading">Neural Vision Lab & Live Database Log</div>', unsafe_allow_html=True)
+    col_v1, col_v2 = st.columns(2)
     
-    # Map work orders
-    wo_df = pd.DataFrame(st.session_state.work_orders)
-    layer = pdk.Layer(
-        "ScatterplotLayer",
-        data=wo_df,
-        get_position=["lon", "lat"],
-        get_fill_color="[239, 68, 68, 220]",
-        get_radius=400,
-        pickable=True,
-    )
-    view_state = pdk.ViewState(latitude=8.5241, longitude=76.9366, zoom=12, pitch=30)
-    deck = pdk.Deck(layers=[layer], initial_view_state=view_state, map_style="mapbox://styles/mapbox/dark-v10")
-    st.pydeck_chart(deck, use_container_width=True)
+    with col_v1:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Upload Pavement Image", type=["jpg", "png", "jpeg"])
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Pavement Frame", use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+    with col_v2:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("### Tensor Inference Pipeline")
+        st.markdown("<p style='margin-bottom: 20px;'>Runs computer vision models to isolate surface degradation and instantly log tickets to the municipal database.</p>", unsafe_allow_html=True)
+        
+        if uploaded_file is not None:
+            if st.button("RUN YOLOv8 INFERENCE & LOG"):
+                with st.spinner("Processing tensor weights & logging to database..."):
+                    import time
+                    time.sleep(1.0)
+                    
+                    img_annotated = image.copy()
+                    draw = ImageDraw.Draw(img_annotated)
+                    width, height = img_annotated.size
+                    
+                    draw.rectangle([width*0.25, height*0.4, width*0.65, height*0.75], outline="#EF4444", width=5)
+                    draw.rectangle([width*0.25, height*0.4 - 25, width*0.25 + 240, height*0.4], fill="#EF4444")
+                    draw.text((width*0.25 + 5, height*0.4 - 22), "CRITICAL POTHOLE 98.4%", fill="#FFFFFF")
+                        
+                    st.success("Inference complete! Ticket logged.")
+                    st.image(img_annotated, caption="YOLOv8 Bounding Box Output", use_container_width=True)
+                    
+                    # Add to database table state
+                    new_ticket = {
+                        "ticket_id": f"TICK-{random.randint(803, 999)}",
+                        "location": "Ulloor Junction Sector",
+                        "defect": "Critical Pothole",
+                        "confidence": "98.4%",
+                        "status": "Pending"
+                    }
+                    st.session_state.vision_database.insert(0, new_ticket)
+                    st.error("🚨 Hazard logged to active database below!")
+        else:
+            st.info("Please upload an image on the left to begin.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Database Table View Below
+    st.markdown('<div class="section-heading" style="font-size: 1.4rem; margin-top: 40px;">Live Vision Database Logs</div>', unsafe_allow_html=True)
+    db_df = pd.DataFrame(st.session_state.vision_database)
+    st.dataframe(db_df, use_container_width=True, hide_index=True)
+
+elif page == "Acoustic Sonar":
+    st.markdown('<div class="section-heading">Sub-Surface Acoustic Sonar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sleek-card"><p>Simulates ground-penetrating acoustic resonance scans to detect underground voids and hollow pockets before surface failure occurs.</p></div>', unsafe_allow_html=True)
+    if st.button("EXECUTE ACOUSTIC SWEEP"):
+        with st.spinner("Analyzing sub-surface resonance..."):
+            import time
+            time.sleep(1)
+        st.success("Sub-surface hollow identified at -1.4m depth.")
+
+elif page == "Smart-Cure":
+    st.markdown('<div class="section-heading">Smart-Cure V2I Trigger</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+    axle_load = st.slider("Heavy Axle Load (Tons)", 10, 50, 30)
+    if st.button("TRIGGER INDUCTION PULSE"):
+        with st.spinner("Broadcasting electromagnetic pulse..."):
+            import time
+            time.sleep(0.8)
+        st.success(f"Pulse sent for {axle_load}T load. Asphalt microcapsules activated.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Carbon Ledger":
+    st.markdown('<div class="section-heading">Carbon Credit Ledger</div>', unsafe_allow_html=True)
+    c_col1, c_col2 = st.columns(2)
+    with c_col1:
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size:2.5rem;">142.5 tCO2e</h2><p style="margin-top:10px;">Avoided hot-mix bitumen emissions verified.</p></div>', unsafe_allow_html=True)
+    with c_col2:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("### Ledger Minting")
+        if st.button("MINT VERIFIED CREDITS"):
+            st.success("Successfully minted cryptographic proof on municipal ledger.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Citizen Hub":
+    st.markdown('<div class="section-heading">Citizen Vigil Hub</div>', unsafe_allow_html=True)
+    cit_1, cit_2 = st.columns(2)
+    with cit_1:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        with st.form("report_form"):
+            st.markdown("### Report Road Hazard")
+            loc = st.text_input("Street Name")
+            if st.form_submit_button("SUBMIT REPORT") and loc:
+                st.success("Hazard logged into telemetry loop!")
+        st.markdown('</div>', unsafe_allow_html=True)
+    with cit_2:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("### Active Community Reports")
+        for r in st.session_state.community_reports:
+            st.markdown(f"""<div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #D4AF37;"><b>{r['location']}</b><br><span style="color:#D4AF37; font-size:0.9rem;">{r['type']}</span></div>""", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Cost Estimator":
+    st.markdown('<div class="section-heading">Severity & Cost Estimator</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+    w = st.slider("Width (cm)", 10, 200, 50)
+    d = st.slider("Depth (cm)", 2, 50, 10)
+    cost = (w * w * d / 1000) * 2.75 + 150
+    st.markdown(f"""
+        <div style="margin-top: 20px; padding: 20px; background: rgba(212,175,55,0.05); border-radius: 12px; border: 1px solid rgba(212,175,55,0.3); text-align: center;">
+            <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem;">₹{cost:.2f}</h2>
+            <p style="margin-top: 5px;">Estimated Real-Time Repair Budget</p>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == "Finance":
-    st.markdown('<div class="section-heading">SLA Penalty Prevention Economics</div>', unsafe_allow_html=True)
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown('<div class="sleek-card" style="border-color: rgba(239,68,68,0.4);"><h3 style="color:#EF4444; font-family:\'Cinzel\';">Without Auto-Dispatch</h3><h2 style="color:#EF4444; font-size:2.2rem; margin:10px 0;">14 Days</h2><p>Average time taken for citizen complaints to reach repair contractors, resulting in heavy highway penalty fines.</p></div>', unsafe_allow_html=True)
-    with c2:
-        st.markdown('<div class="sleek-card" style="border-color: rgba(212,175,55,0.4);"><h3 style="color:#D4AF37; font-family:\'Cinzel\';">With ROADX Closed-Loop</h3><h2 style="color:#D4AF37; font-size:2.2rem; margin:10px 0;">< 4 Hours</h2><p>Automated fleet ingestion to contractor dispatch loop, eliminating administrative delays and financial penalties.</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-heading">Financial Economics</div>', unsafe_allow_html=True)
+    f_c1, f_c2 = st.columns(2)
+    with f_c1:
+        st.markdown("""
+            <div class="sleek-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                <h3 style="color:#EF4444; font-family:'Cinzel';">Traditional Reactive</h3>
+                <h2 style="color:#EF4444; font-family:'Cinzel'; font-size:2.2rem; margin: 10px 0;">₹4.5 Cr / yr</h2>
+                <p>High ongoing costs from late-stage full road reconstruction cycles.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with f_c2:
+        st.markdown("""
+            <div class="sleek-card" style="border-color: rgba(212, 175, 55, 0.4);">
+                <h3 style="color:#D4AF37; font-family:'Cinzel';">ROADX Preventative</h3>
+                <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.2rem; margin: 10px 0;">₹1.8 Cr / yr</h2>
+                <p>Targeted micro-interventions saving over 60% annually.</p>
+            </div>
+        """, unsafe_allow_html=True)
 
 # --- FOOTER ---
 st.markdown("""
     <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 80px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // AUTONOMOUS FLEET TELEMETRY</div>
+        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // TRIVANDRUM MUNICIPAL PILOT</div>
     </div>
 """, unsafe_allow_html=True)
