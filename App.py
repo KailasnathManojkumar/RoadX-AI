@@ -34,6 +34,19 @@ st.markdown("""
             border-right: 1px solid rgba(212, 175, 55, 0.2);
         }
 
+        /* Force Sidebar Toggle Arrow to be Visible & Gold */
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            color: #D4AF37 !important;
+            z-index: 999999 !important;
+        }
+
+        [data-testid="collapsedControl"] svg {
+            fill: #D4AF37 !important;
+            color: #D4AF37 !important;
+        }
+
         .block-container {
             max-width: 1300px !important;
             padding-top: 2rem !important;
@@ -42,7 +55,8 @@ st.markdown("""
             padding-right: 3rem !important;
         }
 
-        #MainMenu, footer, header {visibility: hidden;}
+        /* Only hide footer/menu, keep header visible so sidebar toggle arrow works */
+        #MainMenu, footer {visibility: hidden;}
 
         .brand-title {
             font-family: 'Cinzel', serif;
@@ -108,7 +122,7 @@ if "user_role" not in st.session_state:
     st.session_state.user_role = "Select Role"
 
 if "admin_authenticated" not in st.session_state:
-    st.session_state.admin_authenticated = True
+    st.session_state.admin_authenticated = False
 
 if "carbon_credits" not in st.session_state:
     st.session_state.carbon_credits = 142.5
@@ -193,7 +207,6 @@ if st.session_state.user_role == "Select Role":
         st.markdown("<p style='font-size: 0.9rem; text-align: center; min-height: 50px;'>Command grid telemetry, carbon credit minting, and network economics.</p>", unsafe_allow_html=True)
         if st.button("ENTER AS ADMIN", key="btn_admin"):
             st.session_state.user_role = "Admin / City Planner"
-            st.session_state.admin_authenticated = True
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -217,6 +230,7 @@ with st.sidebar:
 
     if st.button("← SWITCH ROLE", key="switch_role"):
         st.session_state.user_role = "Select Role"
+        st.session_state.admin_authenticated = False
         st.rerun()
 
     st.markdown("<hr style='border-color: rgba(212,175,55,0.15); margin: 20px 0;'>", unsafe_allow_html=True)
@@ -226,12 +240,42 @@ with st.sidebar:
     elif st.session_state.user_role == "Field Contractor":
         pages = ["Field Operations Hub", "Vision Lab", "Cost Estimator"]
     elif st.session_state.user_role == "Admin / City Planner":
-        pages = ["Overview", "Command Center", "Vision Lab", "Carbon Ledger", "Finance"]
+        pages = ["Overview", "Command Center", "Vision Lab", "Carbon Ledger", "Finance"] if st.session_state.admin_authenticated else ["Admin Locked"]
             
     page = st.radio("Navigation", pages, label_visibility="collapsed")
 
 # ================= PAGE ROUTING =================
-if page == "Public Home":
+if page == "Admin Locked":
+    st.markdown("""
+        <div style="padding: 30px 20px 10px 20px; text-align: center;">
+            <h1 style="font-family: 'Cinzel', serif; font-size: 2.2rem; color: #EF4444; margin-bottom: 10px;">ADMINISTRATIVE AUTHORIZATION REQUIRED</h1>
+            <p style="font-size: 1.1rem; max-width: 550px; margin: 0 auto 20px auto; color: #94A3B8;">
+                Restricted enterprise telemetry. Enter security clearance credentials below.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # Popup / Modal Card Dialog Box for Password Entry (kai2000)
+    c_pop1, c_pop2, c_pop3 = st.columns([1, 1.3, 1])
+    with c_pop2:
+        st.markdown('<div class="sleek-card" style="border: 2px solid rgba(212, 175, 55, 0.4); text-align: center;">', unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 2rem; margin-bottom: 10px;'>🔐</div>", unsafe_allow_html=True)
+        st.markdown("<h3 style='font-family: Cinzel; color: #D4AF37; margin-bottom: 15px;'>Security Clearance</h3>", unsafe_allow_html=True)
+        
+        admin_pass = st.text_input("Enter Admin Password", type="password", key="popup_admin_pass", label_visibility="collapsed", placeholder="Enter Password (kai2000)")
+        
+        if st.button("AUTHENTICATE", key="submit_popup_pass"):
+            if admin_pass == "kai2000":
+                st.session_state.admin_authenticated = True
+                st.success("Access Granted. Initializing Command Grid...")
+                st.rerun()
+            else:
+                st.error("Invalid Security Credentials")
+                
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# --- CITIZEN PAGES ---
+elif page == "Public Home":
     st.markdown("""
         <div style="padding: 30px 0 40px 0;">
             <h1 style="font-family: 'Cinzel', serif; font-size: 3.2rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
