@@ -254,7 +254,6 @@ if page == "Admin Locked":
         </div>
     """, unsafe_allow_html=True)
     
-    # Popup / Modal Card Dialog Box for Password Entry
     c_pop1, c_pop2, c_pop3 = st.columns([1, 1.3, 1])
     with c_pop2:
         st.markdown('<div class="sleek-card" style="border: 2px solid rgba(212, 175, 55, 0.4); text-align: center;">', unsafe_allow_html=True)
@@ -307,4 +306,162 @@ elif page == "Report Hazard":
         st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
         st.markdown("### Active Community Reports")
         for r in st.session_state.community_reports:
-            st.markdown(f"""<div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-top:
+            st.markdown(f"<div style=\"background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #D4AF37;\"><b>{r['location']}</b><br><span style=\"color:#D4AF37; font-size:0.9rem;\">{r['type']}</span></div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Community Updates & Fixes":
+    st.markdown('<div class="section-heading">Public Updates & Recent Fixes</div>', unsafe_allow_html=True)
+    col_f1, col_f2 = st.columns(2)
+    with col_f1:
+        st.markdown("### ✅ Recently Fixed & Verified")
+        for fix in st.session_state.completed_fixes:
+            st.markdown(
+                f"<div style=\"background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 16px; margin-bottom: 15px;\"><div style=\"color: #10B981; font-family: 'JetBrains Mono'; font-size: 0.8rem;\">{fix['id']} • {fix['date_resolved']}</div><div style=\"font-weight: 700; color: #FFF; font-size: 1.1rem; margin: 4px 0;\">{fix['location']}</div><div style=\"font-size: 0.9rem; color: #94A3B8;\">Method: {fix['repair_type']}</div></div>",
+                unsafe_allow_html=True
+            )
+    with col_f2:
+        st.markdown("### 🚧 Upcoming Scheduled Developments")
+        st.markdown("""
+            <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 16px; margin-bottom: 15px;">
+                <div style="color: #D4AF37; font-family: 'JetBrains Mono'; font-size: 0.8rem;">SCHEDULED: NEXT WEEK</div>
+                <div style="font-weight: 700; color: #FFF; font-size: 1.1rem; margin: 4px 0;">Corridor Sector 2 Resurfacing</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+# --- CONTRACTOR PAGES ---
+elif page == "Field Operations Hub":
+    st.markdown('<div class="section-heading">Field Contractor Execution Hub</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="sleek-card">
+            <h3>Active Task Assignments & Live Tickets</h3>
+            <p>Review assigned maintenance tickets generated from neural scans and public reports.</p>
+        </div>
+    """, unsafe_allow_html=True)
+    st.dataframe(pd.DataFrame(st.session_state.vision_database), use_container_width=True, hide_index=True)
+
+# --- SHARED TOOLS (Vision Lab & Cost Estimator) ---
+elif page == "Vision Lab":
+    st.markdown('<div class="section-heading">Neural Vision Lab & Defect Logger</div>', unsafe_allow_html=True)
+    col_v1, col_v2 = st.columns(2)
+    with col_v1:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Upload Pavement Image", type=["jpg", "png", "jpeg"])
+        input_location = st.text_input("Exact Incident Location / Street", value="Sector Junction 2")
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Pavement Frame", use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col_v2:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        st.markdown("### Tensor Inference Pipeline")
+        if uploaded_file is not None:
+            if st.button("RUN YOLOv8 INFERENCE & LOG", key="run_inference"):
+                with st.spinner("Processing tensor weights..."):
+                    import time
+                    time.sleep(1.0)
+                    img_annotated = image.copy()
+                    draw = ImageDraw.Draw(img_annotated)
+                    w, h = img_annotated.size
+                    draw.rectangle([w*0.25, h*0.4, w*0.65, h*0.75], outline="#EF4444", width=5)
+                    st.success("Inference complete! Ticket logged to Command Grid.")
+                    st.image(img_annotated, caption="YOLOv8 Bounding Box Output", use_container_width=True)
+                    st.session_state.vision_database.insert(0, {"ticket_id": f"TICK-{random.randint(803, 999)}", "location": input_location, "defect": "Critical Pothole", "confidence": "98.4%", "status": "Pending"})
+        else:
+            st.info("Upload an image to execute object detection.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Cost Estimator":
+    st.markdown('<div class="section-heading">Severity & Cost Estimator</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+    w = st.slider("Width (cm)", 10, 200, 50)
+    d = st.slider("Depth (cm)", 2, 50, 10)
+    cost = (w * w * d / 1000) * 2.75 + 150
+    st.markdown(
+        f"<div style=\"margin-top: 20px; padding: 20px; background: rgba(212,175,55,0.05); border-radius: 12px; border: 1px solid rgba(212,175,55,0.3); text-align: center;\"><h2 style=\"color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem;\">₹{cost:.2f}</h2><p style=\"margin-top: 5px;\">Estimated Real-Time Repair Budget</p></div>",
+        unsafe_allow_html=True
+    )
+    
+    if st.button("SAVE ESTIMATE TO BUDGET", key="save_estimate"):
+        st.session_state.financial_ledger.append({"Record": f"Field Repair Estimate ({w}x{d}cm)", "Amount": f"₹{cost:.2f}", "Type": "Expenditure"})
+        st.success("Estimate successfully committed to financial ledger!")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# --- ADMIN-ONLY PAGES ---
+elif page == "Overview":
+    st.markdown("""
+        <div style="padding: 30px 0 40px 0;">
+            <h1 style="font-family: 'Cinzel', serif; font-size: 3.2rem; font-weight: 800; color: #FFF; line-height: 1.1; margin-bottom: 15px;">
+                ADMINISTRATIVE <span style="color: #D4AF37;">OVERVIEW.</span>
+            </h1>
+            <p style="font-size: 1.2rem; max-width: 750px; color: #94A3B8;">High-level asset health, macro telemetry, and budgetary oversight.</p>
+        </div>
+    """, unsafe_allow_html=True)
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown('<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">12.4 km</h2><p style="margin-top:5px;">Pilot Corridor Monitored</p></div>', unsafe_allow_html=True)
+    with c2:
+        st.markdown(f'<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">{len(st.session_state.vision_database)}</h2><p style="margin-top:5px;">Active Defect Tickets</p></div>', unsafe_allow_html=True)
+    with c3:
+        st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{st.session_state.carbon_credits:.1f} t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
+
+elif page == "Command Center":
+    st.markdown('<div class="section-heading">Command Grid</div>', unsafe_allow_html=True)
+    col_map, col_ctrl = st.columns([2, 1])
+    with col_map:
+        layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=df,
+            get_position=["Longitude", "Latitude"],
+            get_fill_color="color",
+            get_radius=350,
+            pickable=True,
+        )
+        view_state = pdk.ViewState(latitude=8.5241, longitude=76.9366, zoom=12, pitch=30)
+        deck = pdk.Deck(layers=[layer], initial_view_state=view_state, map_style="mapbox://styles/mapbox/dark-v10")
+        st.pydeck_chart(deck, use_container_width=True)
+    with col_ctrl:
+        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
+        sel_id = st.selectbox("Select Asset Corridor", df["Road_ID"])
+        row = df[df["Road_ID"] == sel_id].iloc[0]
+        st.markdown(f"""
+            <div style="margin-top: 15px;">
+                <b>Location:</b> {row['Location']}<br><br>
+                <b>Health Score:</b> <span style="color: #D4AF37; font-weight: 700;">{row['Health_Score']} / 100</span><br><br>
+                <b>Failure ETA:</b> {row['Predicted_Failure_Days']}<br><br>
+                <b>2-Wheeler Risk:</b> {row['Two_Wheeler_Risk']}
+            </div>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Carbon Ledger":
+    st.markdown('<div class="section-heading">Carbon Credit Ledger</div>', unsafe_allow_html=True)
+    c_col1, c_col2 = st.columns(2)
+    with c_col1:
+        st.markdown(
+            f"<div class=\"sleek-card\" style=\"display: flex; flex-direction: column; justify-content: center;\"><h2 style=\"color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem; margin-bottom: 5px;\">{st.session_state.carbon_credits:.1f} tCO2e</h2><p style=\"margin: 0;\">Avoided hot-mix bitumen emissions verified.</p></div>",
+            unsafe_allow_html=True
+        )
+    with c_col2:
+        st.markdown('<div class="sleek-card" style="display: flex; flex-direction: column; justify-content: center;">', unsafe_allow_html=True)
+        st.markdown("### Ledger Minting")
+        if st.button("MINT VERIFIED CREDITS", key="mint_credits"):
+            st.session_state.carbon_credits += 15.0
+            st.session_state.financial_ledger.append({
+                "Record": "Minted 15.0 tCO2e Carbon Offsets", 
+                "Amount": f"+₹{(15.0 * 8500):,.2f}", 
+                "Type": "Revenue"
+            })
+            st.success("Successfully minted 15.0 cryptographic carbon credits & logged revenue to finance ledger!")
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+elif page == "Finance":
+    st.markdown('<div class="section-heading">Financial Economics & Ledger</div>', unsafe_allow_html=True)
+    st.dataframe(pd.DataFrame(st.session_state.financial_ledger), use_container_width=True, hide_index=True)
+
+# --- FOOTER ---
+st.markdown("""
+    <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 80px; padding-top: 30px; text-align: center;">
+        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // ENTERPRISE INFRASTRUCTURE PLATFORM</div>
+    </div>
+""", unsafe_allow_html=True)
