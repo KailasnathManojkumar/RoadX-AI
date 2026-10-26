@@ -226,16 +226,6 @@ with st.sidebar:
             <div style="font-size: 0.85rem; color: #FFFFFF; font-weight: 600;">{st.session_state.user_role}</div>
         </div>
     """, unsafe_allow_html=True)
-    
-    if st.session_state.user_role == "Admin / City Planner" and not st.session_state.admin_authenticated:
-        st.markdown("<hr style='border-color: rgba(212,175,55,0.15); margin: 10px 0;'>", unsafe_allow_html=True)
-        admin_pass = st.text_input("Enter Admin Password", type="password")
-        if admin_pass == "kai2000":
-            st.session_state.admin_authenticated = True
-            st.success("🔓 Unlocked")
-            st.rerun()
-        elif admin_pass != "":
-            st.error("❌ Invalid Password")
 
     if st.button("← SWITCH ROLE", key="switch_role"):
         st.session_state.user_role = "Select Role"
@@ -256,13 +246,32 @@ with st.sidebar:
 # ================= PAGE ROUTING =================
 if page == "Admin Locked":
     st.markdown("""
-        <div style="padding: 60px 20px; text-align: center;">
-            <h1 style="font-family: 'Cinzel', serif; font-size: 2.5rem; color: #EF4444; margin-bottom: 20px;">ADMIN AUTHENTICATION REQUIRED</h1>
-            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; color: #94A3B8;">
-                Please enter the secure administrative password in the sidebar input field to unlock control systems.
+        <div style="padding: 30px 20px 10px 20px; text-align: center;">
+            <h1 style="font-family: 'Cinzel', serif; font-size: 2.2rem; color: #EF4444; margin-bottom: 10px;">ADMINISTRATIVE AUTHORIZATION REQUIRED</h1>
+            <p style="font-size: 1.1rem; max-width: 550px; margin: 0 auto 20px auto; color: #94A3B8;">
+                Restricted enterprise telemetry. Enter security clearance credentials below.
             </p>
         </div>
     """, unsafe_allow_html=True)
+    
+    # Popup / Modal Card Dialog Box for Password Entry
+    c_pop1, c_pop2, c_pop3 = st.columns([1, 1.3, 1])
+    with c_pop2:
+        st.markdown('<div class="sleek-card" style="border: 2px solid rgba(212, 175, 55, 0.4); text-align: center;">', unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 2rem; margin-bottom: 10px;'>🔐</div>", unsafe_allow_html=True)
+        st.markdown("<h3 style='font-family: Cinzel; color: #D4AF37; margin-bottom: 15px;'>Security Clearance</h3>", unsafe_allow_html=True)
+        
+        admin_pass = st.text_input("Enter Admin Password", type="password", key="popup_admin_pass", label_visibility="collapsed", placeholder="Enter Password (kai2000)")
+        
+        if st.button("AUTHENTICATE", key="submit_popup_pass"):
+            if admin_pass == "kai2000":
+                st.session_state.admin_authenticated = True
+                st.success("Access Granted. Initializing Command Grid...")
+                st.rerun()
+            else:
+                st.error("Invalid Security Credentials")
+                
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # --- CITIZEN PAGES ---
 elif page == "Public Home":
@@ -399,68 +408,4 @@ elif page == "Overview":
     with c2:
         st.markdown(f'<div class="sleek-card"><h2 style="color:#FFF; font-family:\'Cinzel\'; font-size: 2.5rem;">{len(st.session_state.vision_database)}</h2><p style="margin-top:5px;">Active Defect Tickets</p></div>', unsafe_allow_html=True)
     with c3:
-        st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{st.session_state.carbon_credits:.1f} t</h2><p style="margin-top:5px;">Carbon Credits Minted</p></div>', unsafe_allow_html=True)
-
-elif page == "Command Center":
-    st.markdown('<div class="section-heading">Command Grid</div>', unsafe_allow_html=True)
-    col_map, col_ctrl = st.columns([2, 1])
-    with col_map:
-        layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=df,
-            get_position=["Longitude", "Latitude"],
-            get_fill_color="color",
-            get_radius=350,
-            pickable=True,
-        )
-        view_state = pdk.ViewState(latitude=8.5241, longitude=76.9366, zoom=12, pitch=30)
-        deck = pdk.Deck(layers=[layer], initial_view_state=view_state, map_style="mapbox://styles/mapbox/dark-v10")
-        st.pydeck_chart(deck, use_container_width=True)
-    with col_ctrl:
-        st.markdown('<div class="sleek-card">', unsafe_allow_html=True)
-        sel_id = st.selectbox("Select Asset Corridor", df["Road_ID"])
-        row = df[df["Road_ID"] == sel_id].iloc[0]
-        st.markdown(f"""
-            <div style="margin-top: 15px;">
-                <b>Location:</b> {row['Location']}<br><br>
-                <b>Health Score:</b> <span style="color: #D4AF37; font-weight: 700;">{row['Health_Score']} / 100</span><br><br>
-                <b>Failure ETA:</b> {row['Predicted_Failure_Days']}<br><br>
-                <b>2-Wheeler Risk:</b> {row['Two_Wheeler_Risk']}
-            </div>
-        """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-elif page == "Carbon Ledger":
-    st.markdown('<div class="section-heading">Carbon Credit Ledger</div>', unsafe_allow_html=True)
-    c_col1, c_col2 = st.columns(2)
-    with c_col1:
-        st.markdown(f"""
-            <div class="sleek-card" style="display: flex; flex-direction: column; justify-content: center;">
-                <h2 style="color:#D4AF37; font-family:'Cinzel'; font-size:2.5rem; margin-bottom: 5px;">{st.session_state.carbon_credits:.1f} tCO2e</h2>
-                <p style="margin: 0;">Avoided hot-mix bitumen emissions verified.</p>
-            </div>
-        """, unsafe_allow_html=True)
-    with c_col2:
-        st.markdown('<div class="sleek-card" style="display: flex; flex-direction: column; justify-content: center;">', unsafe_allow_html=True)
-        st.markdown("### Ledger Minting")
-        if st.button("MINT VERIFIED CREDITS", key="mint_credits"):
-            st.session_state.carbon_credits += 15.0
-            st.session_state.financial_ledger.append({
-                "Record": "Minted 15.0 tCO2e Carbon Offsets", 
-                "Amount": f"+₹{(15.0 * 8500):,.2f}", 
-                "Type": "Revenue"
-            })
-            st.success("Successfully minted 15.0 cryptographic carbon credits & logged revenue to finance ledger!")
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-elif page == "Finance":
-    st.markdown('<div class="section-heading">Financial Economics & Ledger</div>', unsafe_allow_html=True)
-    st.dataframe(pd.DataFrame(st.session_state.financial_ledger), use_container_width=True, hide_index=True)
-
-# --- FOOTER ---
-st.markdown("""
-    <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 80px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // ENTERPRISE INFRASTRUCTURE PLATFORM</div>
-    </div>
-""", unsafe_allow_html=True)
+        st.markdown(f'<div class="sleek-card"><h2 style="color:#D4AF37; font-family:\'Cinzel\'; font-size: 2.5rem;">{st.session_state.carbon_credits:.1f} t</h2><p style="
