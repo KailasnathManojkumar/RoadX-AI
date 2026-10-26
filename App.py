@@ -461,4 +461,6 @@ elif page == "Finance":
 # --- FOOTER ---
 st.markdown("""
     <div style="border-top: 1px solid rgba(212,175,55,0.2); margin-top: 80px; padding-top: 30px; text-align: center;">
-        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37
+        <div style="font-family: 'Cinzel', serif; font-size: 0.8rem; color: #D4AF37; letter-spacing: 3px;">ROADX.AI © 2026 // ENTERPRISE INFRASTRUCTURE PLATFORM</div>
+    </div>
+""", unsafe_allow_html=True)
