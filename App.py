@@ -55,7 +55,6 @@ st.markdown("""
             padding-right: 3rem !important;
         }
 
-        /* Only hide footer/menu, keep header visible so sidebar toggle arrow works */
         #MainMenu, footer {visibility: hidden;}
 
         .brand-title {
@@ -255,14 +254,14 @@ if page == "Admin Locked":
         </div>
     """, unsafe_allow_html=True)
     
-    # Popup / Modal Card Dialog Box for Password Entry (kai2000)
+    # Popup / Modal Card Dialog Box for Password Entry (Clean Placeholder)
     c_pop1, c_pop2, c_pop3 = st.columns([1, 1.3, 1])
     with c_pop2:
         st.markdown('<div class="sleek-card" style="border: 2px solid rgba(212, 175, 55, 0.4); text-align: center;">', unsafe_allow_html=True)
         st.markdown("<div style='font-size: 2rem; margin-bottom: 10px;'>🔐</div>", unsafe_allow_html=True)
         st.markdown("<h3 style='font-family: Cinzel; color: #D4AF37; margin-bottom: 15px;'>Security Clearance</h3>", unsafe_allow_html=True)
         
-        admin_pass = st.text_input("Enter Admin Password", type="password", key="popup_admin_pass", label_visibility="collapsed", placeholder="Enter Password (kai2000)")
+        admin_pass = st.text_input("Enter Admin Password", type="password", key="popup_admin_pass", label_visibility="collapsed", placeholder="Enter security clearance...")
         
         if st.button("AUTHENTICATE", key="submit_popup_pass"):
             if admin_pass == "kai2000":
