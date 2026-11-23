@@ -1,4 +1,3 @@
-
 import os
 import uuid
 import hmac
@@ -122,7 +121,6 @@ div.stButton > button:hover {
 hr {
     border-color: #303640;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -139,7 +137,6 @@ def get_connection():
 
 def initialize_database():
     with get_connection() as conn:
-
         conn.execute("""
         CREATE TABLE IF NOT EXISTS roads (
             id TEXT PRIMARY KEY,
@@ -193,23 +190,15 @@ def initialize_database():
 
         conn.commit()
 
-        # Seed example roads only when the table is empty.
-        count = conn.execute(
-            "SELECT COUNT(*) FROM roads"
-        ).fetchone()[0]
+        count = conn.execute("SELECT COUNT(*) FROM roads").fetchone()[0]
 
         if count == 0:
             sample_roads = [
-                ("R001", "Main Road - Sample Zone A",
-                 8.5241, 76.9366, 82, "Low"),
-                ("R002", "Highway - Sample Zone B",
-                 8.5074, 76.9530, 54, "Medium"),
-                ("R003", "Junction - Sample Zone C",
-                 8.5310, 76.9420, 31, "High"),
-                ("R004", "Residential Road - Sample Zone D",
-                 8.5160, 76.9290, 91, "Low"),
-                ("R005", "Market Road - Sample Zone E",
-                 8.5400, 76.9500, 43, "High"),
+                ("R001", "Main Road - Sample Zone A", 8.5241, 76.9366, 82, "Low"),
+                ("R002", "Highway - Sample Zone B", 8.5074, 76.9530, 54, "Medium"),
+                ("R003", "Junction - Sample Zone C", 8.5310, 76.9420, 31, "High"),
+                ("R004", "Residential Road - Sample Zone D", 8.5160, 76.9290, 91, "Low"),
+                ("R005", "Market Road - Sample Zone E", 8.5400, 76.9500, 43, "High"),
             ]
 
             now = datetime.now().isoformat(timespec="seconds")
@@ -219,9 +208,7 @@ def initialize_database():
                 (id, name, latitude, longitude, health_score,
                  risk_level, last_inspected)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, [
-                (*road, now) for road in sample_roads
-            ])
+            """, [(*road, now) for road in sample_roads])
 
             conn.commit()
 
@@ -369,27 +356,18 @@ def add_repair(report_id, description, cost):
 
 def get_metrics():
     with get_connection() as conn:
-        total = conn.execute(
-            "SELECT COUNT(*) FROM reports"
-        ).fetchone()[0]
-
+        total = conn.execute("SELECT COUNT(*) FROM reports").fetchone()[0]
         pending = conn.execute(
             "SELECT COUNT(*) FROM reports WHERE status = 'Pending'"
         ).fetchone()[0]
-
         active = conn.execute("""
             SELECT COUNT(*) FROM reports
             WHERE status IN ('Assigned', 'In Progress')
         """).fetchone()[0]
-
         completed = conn.execute(
             "SELECT COUNT(*) FROM reports WHERE status = 'Completed'"
         ).fetchone()[0]
-
-        repair_count = conn.execute(
-            "SELECT COUNT(*) FROM repairs"
-        ).fetchone()[0]
-
+        repair_count = conn.execute("SELECT COUNT(*) FROM repairs").fetchone()[0]
         expenses = conn.execute("""
             SELECT COALESCE(SUM(amount), 0)
             FROM finance WHERE entry_type = 'Expense'
@@ -409,33 +387,50 @@ def get_metrics():
 # OPTIONAL YOLO MODEL
 # =========================================================
 
-@st.cache_resource
-def load_yolo_model(model_path):
-    if not YOLO_AVAILABLE:
-        return None
-
-    if not model_path or not Path(model_path).is_file():
-        return None
-
-    try:
-        return YOLO(model_path)
-    except Exception:
-        return None
-
-
 def get_model_path():
     env_path = os.getenv("ROADX_MODEL_PATH")
 
     if env_path:
-        return env_path
+        return env_path.strip()
 
     try:
-        return st.secrets.get("ROADX_MODEL_PATH", "")
+        secret_val = st.secrets.get("ROADX_MODEL_PATH", "")
+        return str(secret_val).strip() if secret_val else ""
     except Exception:
         return ""
 
 
-def run_detection(image_path):
+def resolve_model_path(raw_path: str):
+    if not raw_path:
+        return None
+
+    candidate = Path(raw_path)
+    if candidate.is_file():
+        return candidate
+
+    from_base = BASE_DIR / raw_path
+    if from_base.is_file():
+        return from_base
+
+    return candidate
+
+
+@st.cache_resource
+def load_yolo_model(model_path: str):
+    if not YOLO_AVAILABLE:
+        return None, "Ultralytics is not installed."
+
+    resolved = resolve_model_path(model_path)
+    if resolved is None or not resolved.is_file():
+        return None, f"Model file not found at '{model_path}'."
+
+    try:
+        return YOLO(str(resolved)), None
+    except Exception as error:
+        return None, f"Failed to load model '{resolved.name}': {error}"
+
+
+def run_detection(image_path: str, conf_threshold: float = 0.15):
     model_path = get_model_path()
 
     if not IMAGE_TOOLS_AVAILABLE:
@@ -447,18 +442,16 @@ def run_detection(image_path):
     if not model_path:
         return None, "No trained YOLO model path is configured."
 
-    model = load_yolo_model(model_path)
-
-    if model is None:
-        return None, "The configured model could not be loaded."
+    model, load_error = load_yolo_model(model_path)
+    if load_error or model is None:
+        return None, load_error or "The configured model could not be loaded."
 
     try:
-        results = model(image_path, verbose=False)
+        results = model(image_path, conf=conf_threshold, verbose=False)
         detections = []
 
         for result in results:
-            names = result.names
-
+            names = result.names or {}
             if result.boxes is None:
                 continue
 
@@ -467,7 +460,7 @@ def run_detection(image_path):
                 confidence = float(box.conf[0].item())
 
                 detections.append({
-                    "class": str(names[class_id]),
+                    "class": str(names.get(class_id, class_id)),
                     "confidence": confidence,
                 })
 
@@ -504,6 +497,31 @@ with st.sidebar:
     )
 
     st.session_state.role = selected_role
+
+    if st.session_state.role == "Public":
+        public_page = st.radio(
+            "Citizen navigation",
+            ["Report & Overview", "Community Updates"],
+        )
+    elif st.session_state.role == "Contractor":
+        contractor_page = st.radio(
+            "Contractor navigation",
+            ["Operations Hub"],
+        )
+    else:
+        admin_page = st.radio(
+            "Admin navigation",
+            [
+                "Overview",
+                "Vision Lab",
+                "Command Center",
+                "Report Management",
+                "Cost Estimator",
+            ],
+        )
+        if st.session_state.admin_authenticated and st.button("Lock admin session"):
+            st.session_state.admin_authenticated = False
+            st.rerun()
 
     st.divider()
     st.caption(f"Version {APP_VERSION}")
@@ -770,7 +788,7 @@ def contractor_dashboard():
 
 
 # =========================================================
-# VISION LAB
+# VISION LAB (ADMIN WORKSPACE)
 # =========================================================
 
 def vision_lab():
@@ -778,8 +796,7 @@ def vision_lab():
 
     st.write(
         "Upload a road image to inspect it using a configured "
-        "YOLOv8 model. The model must be trained for the road-defect "
-        "classes you want to identify."
+        "YOLO model. Tune the confidence threshold to test model sensitivity."
     )
 
     model_path = get_model_path()
@@ -795,7 +812,22 @@ def vision_lab():
             "to the path of your trained model weights."
         )
     else:
-        st.success("A model path has been configured. It will be checked when loaded.")
+        resolved = resolve_model_path(model_path)
+        if resolved and resolved.is_file():
+            st.success(f"Model file ready: `{resolved.name}`")
+        else:
+            st.warning(
+                f"Configured `ROADX_MODEL_PATH` (`{model_path}`) was not found."
+            )
+
+    conf_threshold = st.slider(
+        "Confidence threshold",
+        min_value=0.05,
+        max_value=0.90,
+        value=0.15,
+        step=0.05,
+        key="vision_conf_threshold",
+    )
 
     uploaded_file = st.file_uploader(
         "Upload road image",
@@ -812,14 +844,17 @@ def vision_lab():
 
             if st.button("Run AI inspection"):
                 with st.spinner("Inspecting image..."):
-                    detections, error = run_detection(image_path)
+                    detections, error = run_detection(
+                        image_path,
+                        conf_threshold=conf_threshold,
+                    )
 
                 if error:
                     st.error(error)
                 elif not detections:
                     st.info(
-                        "No objects were returned by the model. "
-                        "This does not prove that the road is defect-free."
+                        "No objects were returned at this confidence threshold. "
+                        "Try lowering the confidence slider or testing another road photo."
                     )
                 else:
                     st.success(
@@ -874,10 +909,11 @@ def get_admin_password():
     env_password = os.getenv("ROADX_ADMIN_PASSWORD")
 
     if env_password:
-        return env_password
+        return env_password.strip()
 
     try:
-        return st.secrets.get("ROADX_ADMIN_PASSWORD", "")
+        secret_val = st.secrets.get("ROADX_ADMIN_PASSWORD", "")
+        return str(secret_val).strip() if secret_val else ""
     except Exception:
         return ""
 
@@ -1230,205 +1266,33 @@ def cost_estimator():
     )
 
     st.caption(
-        "Actual costs depend on local material prices, road specifications, "
-        "site conditions, taxes and contractor quotations."
-    )
-
-    if st.button("Add estimate to financial ledger"):
-        add_finance_entry(
-            f"Planning estimate: {length}m × {width}m × {depth}m",
-            total,
-            "Estimate",
-        )
-        st.success("Planning estimate saved to the ledger.")
-
-
-# =========================================================
-# FINANCIAL LEDGER
-# =========================================================
-
-def financial_ledger():
-    st.subheader("Financial Ledger")
-
-    finance = get_dataframe("""
-        SELECT description, amount, entry_type, created_at
-        FROM finance
-        ORDER BY created_at DESC
-    """)
-
-    if finance.empty:
-        st.info("No financial entries have been recorded.")
-        return
-
-    st.dataframe(
-        finance,
-        use_container_width=True,
-        hide_index=True,
-    )
-
-    expenses = finance.loc[
-        finance["entry_type"] == "Expense", "amount"
-    ].sum()
-
-    estimates = finance.loc[
-        finance["entry_type"] == "Estimate", "amount"
-    ].sum()
-
-    col1, col2 = st.columns(2)
-
-    col1.metric("Recorded expenses", f"₹{expenses:,.2f}")
-    col2.metric("Planning estimates", f"₹{estimates:,.2f}")
-
-
-# =========================================================
-# CARBON IMPACT
-# =========================================================
-
-def carbon_impact():
-    st.subheader("Environmental Impact Estimator")
-
-    st.write(
-        "This section records an indicative estimate of emissions "
-        "avoided through a road-repair intervention. It does not "
-        "generate or certify carbon credits."
-    )
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        baseline_emissions = st.number_input(
-            "Estimated baseline emissions (kg CO₂e)",
-            min_value=0.0,
-            value=1000.0,
-            step=50.0,
-        )
-
-    with col2:
-        intervention_emissions = st.number_input(
-            "Estimated intervention emissions (kg CO₂e)",
-            min_value=0.0,
-            value=700.0,
-            step=50.0,
-        )
-
-    avoided = baseline_emissions - intervention_emissions
-
-    st.divider()
-
-    if avoided > 0:
-        st.metric(
-            "Indicative emissions avoided",
-            f"{avoided:,.2f} kg CO₂e",
-        )
-    else:
-        st.metric(
-            "Indicative emissions avoided",
-            f"{avoided:,.2f} kg CO₂e",
-        )
-        st.warning(
-            "The intervention estimate is not lower than the baseline."
-        )
-
-    st.caption(
-        "A defensible carbon claim requires a documented methodology, "
-        "appropriate emission factors, baseline evidence, monitoring "
-        "and independent verification."
+        "Actual costs may vary depending on site conditions, "
+        "materials, and municipal rates."
     )
 
 
 # =========================================================
-# APPLICATION ROUTING
+# WORKSPACE ROUTER
 # =========================================================
 
-role = st.session_state.role
-
-if role == "Public":
-
-    page = st.sidebar.radio(
-        "Public navigation",
-        [
-            "Public Home",
-            "Community Updates",
-        ],
-    )
-
-    if page == "Public Home":
+if st.session_state.role == "Public":
+    if public_page == "Report & Overview":
         public_home()
     else:
         public_updates()
 
+elif st.session_state.role == "Contractor":
+    contractor_dashboard()
 
-elif role == "Contractor":
-
-    page = st.sidebar.radio(
-        "Contractor navigation",
-        [
-            "Operations Hub",
-            "Vision Lab",
-            "Cost Estimator",
-        ],
-    )
-
-    if page == "Operations Hub":
-        contractor_dashboard()
-    elif page == "Vision Lab":
-        vision_lab()
-    elif page == "Cost Estimator":
-        cost_estimator()
-
-
-elif role == "Admin":
-
-    if not st.session_state.admin_authenticated:
-        admin_login()
-
-    else:
-        if st.sidebar.button("Log out"):
-            st.session_state.admin_authenticated = False
-            st.rerun()
-
-        page = st.sidebar.radio(
-            "Admin navigation",
-            [
-                "Overview",
-                "Command Center",
-                "Report Management",
-                "Vision Lab",
-                "Cost Estimator",
-                "Financial Ledger",
-                "Carbon Impact",
-            ],
-        )
-
-        if page == "Overview":
+elif st.session_state.role == "Admin":
+    if st.session_state.admin_authenticated or admin_login():
+        if admin_page == "Overview":
             admin_overview()
-        elif page == "Command Center":
-            command_center()
-        elif page == "Report Management":
-            admin_reports()
-        elif page == "Vision Lab":
+        elif admin_page == "Vision Lab":
             vision_lab()
-        elif page == "Cost Estimator":
+        elif admin_page == "Command Center":
+            command_center()
+        elif admin_page == "Report Management":
+            admin_reports()
+        elif admin_page == "Cost Estimator":
             cost_estimator()
-        elif page == "Financial Ledger":
-            financial_ledger()
-        elif page == "Carbon Impact":
-            carbon_impact()
-
-
-# =========================================================
-# FOOTER
-# =========================================================
-
-st.divider()
-
-st.markdown(
-    """
-    <div style="text-align:center; color:#7e8793; padding:12px;">
-        <b style="color:#d9a94f;">ROADX.AI</b><br>
-        Autonomous Infrastructure Health & Safety Intelligence<br>
-        <small>Prototype edition · Not for operational road-safety decisions</small>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
